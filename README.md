@@ -1,0 +1,2 @@
+# bitbot
+Database class project
