@@ -1,0 +1,16 @@
+1. create a repo on github 
+---BITBOT
+         ---gitignore
+         ---README.md 
+2. clone it from VC and open if from VC 
+3. In VC window, add notes.txt 
+4. follwing the steps to add env 
+https://code.visualstudio.com/docs/python/tutorial-flask
+---BITBOT
+         ---gitignore
+         ---README.md 
+         ---env
+5. create project layout based on this tutorial 
+https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/
+
+
