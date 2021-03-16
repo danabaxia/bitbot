@@ -14,3 +14,6 @@ https://code.visualstudio.com/docs/python/tutorial-flask
 https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/
 
 
+current: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
+
+
