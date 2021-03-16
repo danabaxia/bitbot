@@ -16,4 +16,9 @@ https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/
 
 current: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
 
+SQLalchemy version problem: 
+https://stackoverflow.com/questions/66647787/cannot-connect-to-sqlite-database-with-flask-sqlalchemy
+
+
+
 
