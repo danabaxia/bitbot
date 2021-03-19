@@ -11,22 +11,15 @@ from werkzeug.urls import url_parse
 from flaskr import db
 from datetime import datetime
 from flaskr.forms import EditProfileForm
+import flaskr.data_source as bt 
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home Page', posts=posts)
+    bt_price = bt.get_cypto_price()
+    print('bt price', bt_price)
+    return render_template('index.html', title='Home Page', bt_price=bt_price)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

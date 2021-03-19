@@ -19,6 +19,12 @@ current: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-use
 SQLalchemy version problem: 
 https://stackoverflow.com/questions/66647787/cannot-connect-to-sqlite-database-with-flask-sqlalchemy
 
+push update function:
+https://www.shanelynn.ie/asynchronous-updates-to-a-webpage-with-flask-and-socket-io/
+
+create/update version :
+pip freeze > requirements.txt
+
 
 
 
