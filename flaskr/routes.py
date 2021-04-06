@@ -12,7 +12,9 @@ from flaskr import db
 from datetime import datetime
 from flaskr.forms import EditProfileForm
 import flaskr.data_source as bt 
-
+from flaskr import socketio
+from flask_socketio import SocketIO, send 
+ 
 @app.route('/')
 @app.route('/index')
 @login_required
@@ -20,6 +22,11 @@ def index():
     bt_price = bt.get_cypto_price()
     print('bt price', bt_price)
     return render_template('index.html', title='Home Page', bt_price=bt_price)
+
+@socketio.on('message', namespace='/index')
+def handleMessage(msg):
+    print('Message: ' + msg)
+    send(msg, broadcast=True)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -90,3 +97,5 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
+
+

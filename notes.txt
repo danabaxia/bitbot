@@ -24,6 +24,10 @@ https://www.shanelynn.ie/asynchronous-updates-to-a-webpage-with-flask-and-socket
 
 create/update version :
 pip freeze > requirements.txt
+python -m pip install -r requirements.txt
+
+
+flask bootstrap doc: https://pythonhosted.org/Flask-Bootstrap/basic-usage.html
 
 
 
