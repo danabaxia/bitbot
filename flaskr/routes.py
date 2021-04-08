@@ -74,6 +74,54 @@ def user(username):
     ]
     return render_template('user.html', user=user, posts=posts)
 
+@app.route('/user/<username>/summary')
+@login_required
+def summary(username):
+    print('test')
+    user = User.query.filter_by(username=username).first_or_404()
+    print(type(user))
+    return render_template('summary.html')
+
+@app.route('/user/<username>/position')
+@login_required
+def position(username):
+    print('test')
+    user = User.query.filter_by(username=username).first_or_404()
+    print(type(user))
+    return render_template('position.html')
+
+@app.route('/user/<username>/market')
+@login_required
+def market(username):
+    print('test')
+    user = User.query.filter_by(username=username).first_or_404()
+    print(type(user))
+    return render_template('market.html')
+
+@app.route('/user/<username>/strategy')
+@login_required
+def strategy(username):
+    print('test')
+    user = User.query.filter_by(username=username).first_or_404()
+    print(type(user))
+    return render_template('strategy.html')
+
+@app.route('/user/<username>/analysis')
+@login_required
+def analysis(username):
+    print('test')
+    user = User.query.filter_by(username=username).first_or_404()
+    print(type(user))
+    return render_template('analysis.html')
+
+@app.route('/user/<username>/history')
+@login_required
+def history(username):
+    print('test')
+    user = User.query.filter_by(username=username).first_or_404()
+    print(type(user))
+    return render_template('history.html')
+
 #record user last visit 
 @app.before_request
 def before_request():

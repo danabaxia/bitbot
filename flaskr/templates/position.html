@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3>{{ current_user.username }}</h3>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Summary</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('position',username=current_user.username)}}">Position</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">History</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{{url_for('analysis',username=current_user.username)}}">Analysis</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{{url_for('strategy',username=current_user.username)}}">Strategy</a>
+      </li>
+   </ul>
+
+    <h5>under construction...</h5>
+
+{% endblock %}
