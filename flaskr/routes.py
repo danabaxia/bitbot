@@ -98,13 +98,13 @@ def market(username):
     print(type(user))
     return render_template('market.html')
 
-@app.route('/user/<username>/strategy')
+@app.route('/user/<username>/trade')
 @login_required
-def strategy(username):
+def trade(username):
     print('test')
     user = User.query.filter_by(username=username).first_or_404()
     print(type(user))
-    return render_template('strategy.html')
+    return render_template('trade.html')
 
 @app.route('/user/<username>/analysis')
 @login_required
