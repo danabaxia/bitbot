@@ -5,42 +5,39 @@ from flask_login import UserMixin
 from flaskr import login
 from hashlib import md5
 
+
 class User(UserMixin, db.Model):
     __tablename__ = 'Users'
 
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
+    email = db.Column(db.String(120), index=True)
     password_hash = db.Column(db.String(128))
     mobilenumber = db.Column(db.String(128))
     address = db.Column(db.String(128))
+    cash_balance = db.Column(db.float)
+    bitcoin_value = db.Column(db.float)
 
     @property
     def password(self):
-        """
-        Prevent pasword from being accessed
-        """
         raise AttributeError('password is not a readable attribute.')
 
     @password.setter
     def password(self, password):
-        """
-        Set password to a hashed password
-        """
         self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
-        """
-        Check if hashed password matches actual password
-        """
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return '<Employee: {}>'.format(self.username
-        
+        return '<User: {}>'.format(self.username)
+
     @login_manager.user_loader
-    def load_user(id):
-        return User.query.get(int(id))
+    def load_user(user_id):
+        try:
+            return User.get(User.id == user_id)
+        except User.DoesNotExist:
+            return None
 
 
 class Transaction(UserMixin, db.Model):
@@ -51,6 +48,9 @@ class Transaction(UserMixin, db.Model):
     transaction_bitcoin_number = db.Column(db.Integer, index=True)
     bitcoin_date = db.Column(db.DateTime)
     user_id = db.Column(db.Integer)
+    bitcoin_price = db.Column(db.float)
+    transaction_amount = db.Column(db.float)
+    order_type = db.Column(db.String(64), index=True)
 
     def __repr__(self):
         return '<Transaction: {}>'.format(self.transaction_id)
@@ -76,9 +76,3 @@ class Strategy(UserMixin, db.Model):
 
     def __repr__(self):
         return '<Strategy: {}>'.format(self.product_id)
-
-
-
-
-
-
