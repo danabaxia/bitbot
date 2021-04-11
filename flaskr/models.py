@@ -2,7 +2,7 @@ from datetime import datetime
 from flaskr import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from flaskr import login
+from flaskr import login_manager
 from hashlib import md5
 
 
@@ -15,8 +15,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     mobilenumber = db.Column(db.String(128))
     address = db.Column(db.String(128))
-    cash_balance = db.Column(db.float)
-    bitcoin_value = db.Column(db.float)
+    cash_balance = db.Column(db.Float)
+    bitcoin_value = db.Column(db.Float)
 
     @property
     def password(self):
@@ -48,8 +48,8 @@ class Transaction(UserMixin, db.Model):
     transaction_bitcoin_number = db.Column(db.Integer, index=True)
     bitcoin_date = db.Column(db.DateTime)
     user_id = db.Column(db.Integer)
-    bitcoin_price = db.Column(db.float)
-    transaction_amount = db.Column(db.float)
+    bitcoin_price = db.Column(db.Float)
+    transaction_amount = db.Column(db.Float)
     order_type = db.Column(db.String(64), index=True)
 
 
