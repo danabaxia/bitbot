@@ -56,7 +56,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data, phone=form.phone.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -105,6 +105,14 @@ def trade(username):
     user = User.query.filter_by(username=username).first_or_404()
     print(type(user))
     return render_template('trade.html')
+
+@app.route('/user/<username>/transfer')
+@login_required
+def transfer(username):
+    print('test')
+    user = User.query.filter_by(username=username).first_or_404()
+    print(type(user))
+    return render_template('transfer.html')
 
 @app.route('/user/<username>/analysis')
 @login_required

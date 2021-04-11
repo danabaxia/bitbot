@@ -1,0 +1,34 @@
+{% extends "base_user.html" %}
+
+{% block content %}
+  <div class="container">
+      <div class="row">
+          <div class="col-sm-2">
+            <label for="symbol" class="form-label">From</label>
+          </div>
+          <div class="col-sm-4">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                <option selected value="1">Bank XXXX</option>
+                <option value="2">Wallet</option>
+            </select>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2">
+          <label for="symbol" class="form-label">To</label>
+        </div>
+        <div class="col-sm-4">
+          <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+              <option selected value="1">Wallet</option>
+              <option value="2">Bank XXXX</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-group input-group-sm mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-sm">Amount</span>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+
+{% endblock %}
