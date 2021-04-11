@@ -13,6 +13,9 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    address = db.Column(db.String(128))
+    cash_balance = db.Column(db.Float)
+    bitcoin_value = db.Column(db.Float)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)    
@@ -38,6 +41,25 @@ class Transaction(db.Model):
     price = db.column(db.Float)
     user_id = db.column(db.Integer, db.ForeignKey('user.id'))
 
+class Product(UserMixin, db.Model):
+    __tablename__ = 'Products'
+
+    product_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    subcription_type = db.Column(db.String(64), index=True)
+
+    def __repr__(self):
+        return '<Product: {}>'.format(self.product_id)
+
+class Strategy(UserMixin, db.Model):
+    __tablename__ = 'Strategies'
+
+    product_id = db.Column(db.Integer, primary_key=True)
+    strategy_name = db.Column(db.String(64), index=True)
+    product_strategy_algorithm = db.Column(db.String(64), index=True)
+
+    def __repr__(self):
+        return '<Strategy: {}>'.format(self.product_id)
 
 @login_manager.user_loader
 def load_user(id):
