@@ -32,13 +32,16 @@
         <a class="nav-link" href="{{url_for('position',username=current_user.username)}}">Position</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">History</a>
+        <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">Activities</a>
       </li>
       <li class="nav-item">
           <a class="nav-link" href="{{url_for('analysis',username=current_user.username)}}">Analysis</a>
       </li>
       <li class="nav-item">
           <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
       </li>
     </ul>
 

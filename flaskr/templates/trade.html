@@ -1,14 +1,48 @@
 {% extends "base_user.html" %}
 {% block content %}
 <div class="container">
+  <form action="">
   <div class="row">
     <div class="col-sm-2">
-      1 of 3
+      <label for="symbol" class="form-label">Symbol</label>
     </div>
-    <div class="col-sm-4">
-      2 of 3 (wider)
+    <div class="col-sm-2">
+      <label for="action" class="form-label">Action</label>
+    </div>
+    <div class="col-sm-2">
+      <label for="order" class="form-label">Order</label>
     </div>
   </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <option selected value="1">BCT</option>
+      </select>
+    </div>
+    <div class="col-sm-2">
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <option selected value="1">Buy</option>
+        <option value="2">Sell</option>
+      </select>
+    </div>
+    <div class="col-sm-2">
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <option selected value="1">Limit Order</option>
+        <option value="2">Market Order</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="input-group input-group-sm mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Amount</span>
+    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+  </div>
+  <div class="input-group input-group-sm mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Limit Price</span>
+    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 </div>
 
 

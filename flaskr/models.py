@@ -52,6 +52,8 @@ class Transaction(UserMixin, db.Model):
     transaction_amount = db.Column(db.float)
     order_type = db.Column(db.String(64), index=True)
 
+
+
     def __repr__(self):
         return '<Transaction: {}>'.format(self.transaction_id)
 
