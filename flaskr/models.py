@@ -14,8 +14,8 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     address = db.Column(db.String(128))
-    cash_balance = db.Column(db.Float)
-    bitcoin_value = db.Column(db.Float)
+    cash_balance = db.Column(db.Float, default=0)
+    bitcoin_value = db.Column(db.Float, default=0)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)    
@@ -33,19 +33,20 @@ class User(UserMixin, db.Model):
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
-    action = db.column(db.String(16))
-    order = db.column(db.String(16))
-    status = db.column(db.String(16))
-    amount = db.column(db.Float)
-    price = db.column(db.Float)
-    user_id = db.column(db.Integer, db.ForeignKey('user.id'))
+    action = db.Column(db.String(16))
+    order = db.Column(db.String(16))
+    status = db.Column(db.String(16))
+    amount = db.Column(db.Float)
+    price = db.Column(db.Float)
 
 class Product(UserMixin, db.Model):
     __tablename__ = 'Products'
 
-    product_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True)
+    order = db.Column(db.String(16))
     subcription_type = db.Column(db.String(64), index=True)
 
     def __repr__(self):

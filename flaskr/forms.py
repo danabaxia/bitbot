@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from flaskr.models import User
 # from flask.ext.mysql import MySQL
@@ -34,3 +34,14 @@ class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
+
+class TransferForm(FlaskForm):
+    cash = FloatField('Amount', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+class TransactionForm(FlaskForm):
+    amount = FloatField('Amount', validators=[DataRequired()])
+    action = StringField('Action')
+    order = StringField('Order')
+    price = FloatField('Price', validators=[DataRequired()])
+    submit = SubmitField('Sumbit')

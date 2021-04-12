@@ -1,10 +1,6 @@
 {% extends "base_user.html" %}
 {% block content %}
-    <div class="card" style="width: 18rem;">
-      <ul class="list-group list-group-flush">
-          <li class="list-group-item">Account Balance: </li>
-          <li class="list-group-item">Cryptocurrency: </li>
-          <li class="list-group-item">Cash: </li>
-      </ul>
-    </div>
+<h5>Account Balance: {{ bit + cash }}</h5>
+<h5>Cryptocurrency:  {{ bit }}</h5>
+<h5>Cash: {{ cash }}</h5>
 {% endblock %}

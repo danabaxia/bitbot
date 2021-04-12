@@ -14,7 +14,26 @@
           </tr>
         </thead>
         <tbody>
+          {% for row in data %} 
+            {% if row.status == "Filing" %}   
+            <tr >
+                <td>{{row.date}}</td>
+                <td>{{row.action}}</td>
+                <td>{{row.order}}</td>
+                <td>{{row.status}}</td>
+                <td>{{row.amount}}</td>
+                <td>{{row.price}}</td>
+                <td><button onclick = "removeRow()">Remove</button></td>
 
+                <script>
+                  function removeRow() {
+                    document.getElementsByTagName("tr")[1].remove()
+
+                  }
+                </script>
+            </tr>
+            {% endif %}
+        {% endfor %}
         </tbody>
     </table><p>History</p>
     <table class="table">
@@ -29,6 +48,18 @@
           </tr>
         </thead>
         <tbody>
+          {% for row in data %} 
+            {% if row.status == "Complete" %}   
+            <tr>
+                <td>{{row.date}}</td>
+                <td>{{row.action}}</td>
+                <td>{{row.order}}</td>
+                <td>{{row.status}}</td>
+                <td>{{row.amount}}</td>
+                <td>{{row.price}}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
 
         </tbody>
     </table>

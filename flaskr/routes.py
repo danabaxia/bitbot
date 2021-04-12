@@ -2,9 +2,9 @@ from flask import render_template, flash, redirect
 from flask.helpers import url_for
 from flask_login.utils import login_required
 from flaskr import app
-from flaskr.forms import LoginForm, RegistrationForm
+from flaskr.forms import LoginForm, RegistrationForm, TransferForm, TransactionForm
 from flask_login import current_user, login_user
-from flaskr.models import User
+from flaskr.models import User, Transaction
 from flask_login import logout_user
 from flask import request
 from werkzeug.urls import url_parse
@@ -64,23 +64,25 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/user/<username>')
+@app.route('/user/<username>', methods=['GET','POST'])
 @login_required
 def user(username):
+    print('test')
     user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
-    return render_template('user.html', user=user, posts=posts)
+    print(user.cash_balance)
+    cash = user.cash_balance
+    bit = user.bitcoin_value
+    return render_template('summary.html',cash=cash,bit=bit)
 
-@app.route('/user/<username>/summary')
+@app.route('/user/<username>/summary', methods=['GET', 'POST'])
 @login_required
 def summary(username):
     print('test')
     user = User.query.filter_by(username=username).first_or_404()
-    print(type(user))
-    return render_template('summary.html')
+    print(user.cash_balance)
+    cash = user.cash_balance
+    bit = user.bitcoin_value
+    return render_template('summary.html',cash=cash,bit=bit)
 
 @app.route('/user/<username>/position')
 @login_required
@@ -98,21 +100,27 @@ def market(username):
     print(type(user))
     return render_template('market.html')
 
-@app.route('/user/<username>/trade')
+@app.route('/user/<username>/trade', methods=['GET','POST'])
 @login_required
 def trade(username):
-    print('test')
-    user = User.query.filter_by(username=username).first_or_404()
-    print(type(user))
-    return render_template('trade.html')
+    form = TransactionForm()
+    if request.method == "POST":
+        user = User.query.filter_by(username=username).first()
+        user.cash_balance -= form.amount.data
+        user.bitcoin_value += form.amount.data
+        db.session.commit() 
+        user_id = user.id
+        print('amount',form.amount.data)
+        print('price', form.price.data)
+        transaction = Transaction(username=username,amount=form.amount.data, action='Buy',
+                                  order='Limit',price=form.price.data,status='Filing')
+        db.session.add(transaction)
+        db.session.commit() 
+        return render_template('summary.html', cash=user.cash_balance, bit=user.bitcoin_value)
 
-@app.route('/user/<username>/transfer')
-@login_required
-def transfer(username):
-    print('test')
-    user = User.query.filter_by(username=username).first_or_404()
-    print(type(user))
-    return render_template('transfer.html')
+
+    return render_template('trade.html', form=form)
+
 
 @app.route('/user/<username>/analysis')
 @login_required
@@ -122,13 +130,12 @@ def analysis(username):
     print(type(user))
     return render_template('analysis.html')
 
-@app.route('/user/<username>/history')
+@app.route('/user/<username>/history', methods=['GET','POST'])
 @login_required
 def history(username):
-    print('test')
     user = User.query.filter_by(username=username).first_or_404()
-    print(type(user))
-    return render_template('history.html')
+    data = Transaction.query.filter_by(username=username).all()
+    return render_template('history.html',data=data)
 
 #record user last visit 
 @app.before_request
@@ -138,7 +145,7 @@ def before_request():
         db.session.commit()
  
 #edit user profile
-@app.route('/edit_profile', methods=['GET', 'POST'])
+@app.route('/edit_profile', methods=['POST','GET'])
 @login_required
 def edit_profile():
     form = EditProfileForm()
@@ -154,4 +161,24 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
+@app.route('/test', methods=["GET","POST"])
+def test():
+    if request.method == "POST":
+        return 'this is post'
+    return render_template('test.html')
 
+
+@app.route('/user/<username>/transfer', methods=["GET","POST"])
+@login_required
+def transfer(username):
+    form = TransferForm()
+    username = username
+    if request.method == "POST":
+        print('cash', form.cash.data)
+        user = User.query.filter_by(username=username).first()
+        user.cash_balance += form.cash.data
+        db.session.commit()
+        cash = user.cash_balance
+        print('updata cash', user.cash_balance)
+        return render_template('summary.html', cash=user.cash_balance, bit=user.bitcoin_value)
+    return render_template('transfer.html', form=form)

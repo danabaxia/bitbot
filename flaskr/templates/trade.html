@@ -1,7 +1,6 @@
 {% extends "base_user.html" %}
 {% block content %}
-<div class="container">
-  <form action="">
+  <form action="#", method="post">
   <div class="row">
     <div class="col-sm-2">
       <label for="symbol" class="form-label">Symbol</label>
@@ -33,17 +32,16 @@
     </div>
   </div>
 
-  <div class="input-group input-group-sm mb-3">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Amount</span>
-    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-  </div>
-  <div class="input-group input-group-sm mb-3">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Limit Price</span>
-    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <p>
+    {{  form.amount.label  }}<br>
+    {{  form.amount  }}<br>
+  </p>
+  <p>
+    {{  form.price.label  }}<br>
+    {{  form.price  }}<br>
+  </p>
+  <p>{{  form.submit()  }}</p>
   </form>
-</div>
 
 
 {% endblock %}
