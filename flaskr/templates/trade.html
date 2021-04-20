@@ -1,0 +1,47 @@
+{% extends "base_user.html" %}
+{% block content %}
+  <form action="#", method="post">
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="symbol" class="form-label">Symbol</label>
+    </div>
+    <div class="col-sm-2">
+      <label for="action" class="form-label">Action</label>
+    </div>
+    <div class="col-sm-2">
+      <label for="order" class="form-label">Order</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <option selected value="1">BCT</option>
+      </select>
+    </div>
+    <div class="col-sm-2">
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <option selected value="1">Buy</option>
+        <option value="2">Sell</option>
+      </select>
+    </div>
+    <div class="col-sm-2">
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <option selected value="1">Limit Order</option>
+        <option value="2">Market Order</option>
+      </select>
+    </div>
+  </div>
+
+  <p>
+    {{  form.amount.label  }}<br>
+    {{  form.amount  }}<br>
+  </p>
+  <p>
+    {{  form.price.label  }}<br>
+    {{  form.price  }}<br>
+  </p>
+  <p>{{  form.submit()  }}</p>
+  </form>
+
+
+{% endblock %}

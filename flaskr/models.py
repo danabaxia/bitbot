@@ -2,17 +2,20 @@ from datetime import datetime
 from flaskr import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from flaskr import login
+from flaskr import login_manager
 from hashlib import md5
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
+    phone = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    #posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    address = db.Column(db.String(128))
+    cash_balance = db.Column(db.Float, default=0)
+    bitcoin_value = db.Column(db.Float, default=0)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)    
@@ -28,16 +31,37 @@ class User(UserMixin, db.Model):
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
 
-"""class Post(db.Model):
+class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    username = db.Column(db.String(64), index=True)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    action = db.Column(db.String(16))
+    order = db.Column(db.String(16))
+    status = db.Column(db.String(16))
+    amount = db.Column(db.Float)
+    price = db.Column(db.Float)
+
+class Product(UserMixin, db.Model):
+    __tablename__ = 'Products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True)
+    order = db.Column(db.String(16))
+    subcription_type = db.Column(db.String(64), index=True)
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)"""
+        return '<Product: {}>'.format(self.product_id)
 
-@login.user_loader
+class Strategy(UserMixin, db.Model):
+    __tablename__ = 'Strategies'
+
+    product_id = db.Column(db.Integer, primary_key=True)
+    strategy_name = db.Column(db.String(64), index=True)
+    product_strategy_algorithm = db.Column(db.String(64), index=True)
+
+    def __repr__(self):
+        return '<Strategy: {}>'.format(self.product_id)
+
+@login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
-

@@ -1,0 +1,49 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}{{ title }} - BitBot Wallet{% else %}Welcome to Bitbot{% endif %}
+{% endblock %}
+
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Bitbot Trading Platform</a>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                {% if current_user.is_anonymous %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                {% else %}
+                <li><a href="{{ url_for('user', username=current_user.username) }}">My Account</a></li>
+                <li><a href="#">Market</a></li>
+                <li><a href="#">Notifications</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <h3>{{ current_user.username }}</h3>
+    <ul class="nav nav-tabs" style="background-color: #e3f2fd;">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Summary</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('position',username=current_user.username)}}">Position</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">Activities</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{{url_for('analysis',username=current_user.username)}}">Analysis</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
+      </li>
+    </ul>
+
+{% endblock %}
+
