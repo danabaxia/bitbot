@@ -30,6 +30,20 @@ def get_cypto_price():
             return r.json()[0]['price']
         except Exception as exc:
             print('error: ',exc)
+            
+import csv 
+import dateutil.parser
+from flaskr import db
+from flaskr.models import BitPrice
+
+def add_data():
+    with open('bitcoin_price.csv', 'r') as f:
+        next(f)
+        reader = csv.reader(f)
+        for row in reader:
+            new_entry = BitPrice(row[0], row[1], dateutil.parser.parse(row[2]))
+            db.session.add(new_entry)
+            db.session.commit()  
 
 if __name__ == '__main__':
     print(get_cypto_price())
