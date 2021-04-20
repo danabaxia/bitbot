@@ -137,6 +137,11 @@ def history(username):
     data = Transaction.query.filter_by(username=username).all()
     return render_template('history.html',data=data)
 
+@app.route('/remove_order')
+def background_process_test():
+    print ("Hello")
+    return ('nothing')
+
 #record user last visit 
 @app.before_request
 def before_request():

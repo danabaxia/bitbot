@@ -16,21 +16,32 @@
         <tbody>
           {% for row in data %} 
             {% if row.status == "Filing" %}   
-            <tr >
+            <tr>
                 <td>{{row.date}}</td>
                 <td>{{row.action}}</td>
                 <td>{{row.order}}</td>
                 <td>{{row.status}}</td>
                 <td>{{row.amount}}</td>
                 <td>{{row.price}}</td>
-                <td><button onclick = "removeRow()">Remove</button></td>
-
-                <script>
-                  function removeRow() {
-                    document.getElementsByTagName("tr")[1].remove()
-
-                  }
+                <td>
+                <form>
+                  <a href="#" id=test><button class='btn btn-default'>Remove</button></a>
+                </form>
+                </td>
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                <script type=text/javascript>
+                        $(function() {
+                          $('a#test').on('click', function(e) {
+                            e.preventDefault()
+                            $.getJSON('/remove_order',
+                               function(data) {
+            
+                            });
+                            return false;
+                          });
+                       });
                 </script>
+
             </tr>
             {% endif %}
         {% endfor %}
