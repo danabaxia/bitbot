@@ -71,7 +71,7 @@ class Strategy(UserMixin, db.Model):
     __tablename__ = 'Strategy'
 
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('Product.id'))
     strategy_name = db.Column(db.String(64), index=True)
     product_strategy_algorithm = db.Column(db.String(64), index=True)
 
