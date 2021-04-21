@@ -37,7 +37,7 @@ class User(UserMixin, db.Model):
 
 
 class Transaction(UserMixin, db.Model):
-    # __tablename__ = 'Transactions'
+    __tablename__ = 'Transaction'
 
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -54,7 +54,7 @@ class Transaction(UserMixin, db.Model):
 
 
 class Product(UserMixin, db.Model):
-    # __tablename__ = 'Products'
+    __tablename__ = 'Product'
 
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -68,11 +68,10 @@ class Product(UserMixin, db.Model):
 
 
 class Strategy(UserMixin, db.Model):
-    # __tablename__ = 'Strategies'
+    __tablename__ = 'Strategy'
 
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey(
-        'product.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
     strategy_name = db.Column(db.String(64), index=True)
     product_strategy_algorithm = db.Column(db.String(64), index=True)
 
