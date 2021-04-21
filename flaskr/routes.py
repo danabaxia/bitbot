@@ -4,7 +4,7 @@ from flask_login.utils import login_required
 from flaskr import app
 from flaskr.forms import LoginForm, RegistrationForm, TransferForm, TransactionForm
 from flask_login import current_user, login_user
-from flaskr.models import User, Transaction
+from flaskr.models import User, Transaction, Balance
 from flask_login import logout_user
 from flask import request
 from werkzeug.urls import url_parse
@@ -58,7 +58,9 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, phone=form.phone.data)
         user.set_password(form.password.data)
+        balance = Balance(user=user)
         db.session.add(user)
+        db.session.add(balance)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
@@ -69,9 +71,9 @@ def register():
 def user(username):
     print('test')
     user = User.query.filter_by(username=username).first_or_404()
-    print(user.cash_balance)
-    cash = user.cash_balance
-    bit = user.bitcoin_value
+    print(user.balance[0].cash_balance)
+    cash = user.balance[0].cash_balance
+    bit = user.balance[0].bitcoin_value
     return render_template('summary.html',cash=cash,bit=bit)
 
 @app.route('/user/<username>/summary', methods=['GET', 'POST'])
@@ -79,9 +81,9 @@ def user(username):
 def summary(username):
     print('test')
     user = User.query.filter_by(username=username).first_or_404()
-    print(user.cash_balance)
-    cash = user.cash_balance
-    bit = user.bitcoin_value
+    print(user.balance[0].cash_balance)
+    cash = user.balance[0].cash_balance
+    bit = user.balance[0].bitcoin_value
     return render_template('summary.html',cash=cash,bit=bit)
 
 @app.route('/user/<username>/position')
@@ -106,17 +108,16 @@ def trade(username):
     form = TransactionForm()
     if request.method == "POST":
         user = User.query.filter_by(username=username).first()
-        user.cash_balance -= form.amount.data
-        user.bitcoin_value += form.amount.data
+        user.balance[0].cash_balance -= form.amount.data
+        user.balance[0].bitcoin_value += form.amount.data
         db.session.commit() 
-        user_id = user.id
         print('amount',form.amount.data)
         print('price', form.price.data)
-        transaction = Transaction(username=username,amount=form.amount.data, action='Buy',
-                                  order='Limit',price=form.price.data,status='Filing')
+        transaction = Transaction(amount=form.amount.data, action='Buy',
+                                  order='Limit',price=form.price.data,status='Filing', user=user)
         db.session.add(transaction)
         db.session.commit() 
-        return render_template('summary.html', cash=user.cash_balance, bit=user.bitcoin_value)
+        return render_template('summary.html', cash=user.balance[0].cash_balance, bit=user.balance[0].bitcoin_value)
 
 
     return render_template('trade.html', form=form)
@@ -134,7 +135,7 @@ def analysis(username):
 @login_required
 def history(username):
     user = User.query.filter_by(username=username).first_or_404()
-    data = Transaction.query.filter_by(username=username).all()
+    data = user.transactions 
     return render_template('history.html',data=data)
 
 @app.route('/remove_order')
@@ -181,9 +182,9 @@ def transfer(username):
     if request.method == "POST":
         print('cash', form.cash.data)
         user = User.query.filter_by(username=username).first()
-        user.cash_balance += form.cash.data
+        user.balance[0].cash_balance += form.cash.data
         db.session.commit()
-        cash = user.cash_balance
-        print('updata cash', user.cash_balance)
-        return render_template('summary.html', cash=user.cash_balance, bit=user.bitcoin_value)
+        cash = user.balance[0].cash_balance
+        bit = user.balance[0].bitcoin_value
+        return render_template('summary.html', cash=cash, bit=bit)
     return render_template('transfer.html', form=form)

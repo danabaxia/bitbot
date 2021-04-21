@@ -15,11 +15,9 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     address = db.Column(db.String(128))
-    cash_balance = db.Column(db.Float, default=0)
-    bitcoin_value = db.Column(db.Float, default=0)
-    transactions = db.relationship('Transaction', backref='user')
-    products = db.relationship(
-        'Product', backref='user')
+
+    #transactions = db.relationship('Transaction', backref='user')
+    #products = db.relationship('Product', backref='user')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -35,49 +33,58 @@ class User(UserMixin, db.Model):
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
 
+class Balance(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cash_balance = db.Column(db.Float, default=0)
+    bitcoin_value = db.Column(db.Float, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+        nullable=False)
+    user = db.relationship('User',
+        backref=db.backref('balance',lazy=True))
+
+    def __repr__(self):
+        return '<Balance: {}>'.format(self.id)
+
 
 class Transaction(UserMixin, db.Model):
-    __tablename__ = 'Transaction'
-
     id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    username = db.Column(db.String(64), index=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     action = db.Column(db.String(16))
     order = db.Column(db.String(16))
     status = db.Column(db.String(16))
     amount = db.Column(db.Float)
     price = db.Column(db.Float)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+        nullable=False)
+    user = db.relationship('User',
+        backref=db.backref('transactions',lazy=True))
+
 
     def __repr__(self):
         return '<Transaction: {}>'.format(self.id)
 
-
 class Product(UserMixin, db.Model):
-    __tablename__ = 'Product'
-
     id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    username = db.Column(db.String(64), index=True)
     order = db.Column(db.String(16))
-    subcription_type = db.Column(db.String(64), index=True)
-    strategies = db.relationship('Strategy', backref='product')
+    subscription_type = db.Column(db.String(64), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+        nullable=False)
+    user = db.relationship('User',
+        backref=db.backref('products',lazy=True))
 
     def __repr__(self):
-        return '<Product: {}>'.format(self.product_id)
-
+        return '<Product: {}>'.format(self.id)
 
 class Strategy(UserMixin, db.Model):
-    __tablename__ = 'Strategy'
-
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('Product.id'))
     strategy_name = db.Column(db.String(64), index=True)
     product_strategy_algorithm = db.Column(db.String(64), index=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    product = db.relationship('Product',
+        backref=db.backref('strategies',lazy=True))
 
     def __repr__(self):
         return '<Strategy: {}>'.format(self.strategy_name)
-
     
 class BitPrice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
