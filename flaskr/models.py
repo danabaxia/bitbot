@@ -16,8 +16,8 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     address = db.Column(db.String(128))
 
-    #transactions = db.relationship('Transaction', backref='user')
-    #products = db.relationship('Product', backref='user')
+    transactions = db.relationship('Transaction', backref=db.backref('user',lazy=True))
+    products = db.relationship('Product', backref=db.backref('user',lazy=True))
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -56,12 +56,10 @@ class Transaction(UserMixin, db.Model):
     price = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
-    user = db.relationship('User',
-        backref=db.backref('transactions',lazy=True))
-
 
     def __repr__(self):
         return '<Transaction: {}>'.format(self.id)
+
 
 class Product(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,23 +67,22 @@ class Product(UserMixin, db.Model):
     subscription_type = db.Column(db.String(64), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
-    user = db.relationship('User',
-        backref=db.backref('products',lazy=True))
+    strategies = db.relationship('Strategy', backref=db.backref('product',lazy=True))
 
     def __repr__(self):
         return '<Product: {}>'.format(self.id)
+
 
 class Strategy(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     strategy_name = db.Column(db.String(64), index=True)
     product_strategy_algorithm = db.Column(db.String(64), index=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
-    product = db.relationship('Product',
-        backref=db.backref('strategies',lazy=True))
-
+  
     def __repr__(self):
         return '<Strategy: {}>'.format(self.strategy_name)
     
+
 class BitPrice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     exchange = db.Column(db.String())  
@@ -101,6 +98,7 @@ class BitPrice(db.Model):
 
     def __repr__(self):
         return '<Exchange {}>'.format(self.exchange)
+
 
 @login_manager.user_loader
 def load_user(id):
