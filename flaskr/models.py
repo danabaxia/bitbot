@@ -88,8 +88,8 @@ class Strategy(UserMixin, db.Model):
     
 class BitPrice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    exchange = db.Column(db.String())  
-    price = db.Column(db.String())     
+    exchange = db.Column(db.String(64))  
+    price = db.Column(db.String(64))     
     horah = db.Column(db.DateTime)
 
     def __init__(self, exchange, price, horah):

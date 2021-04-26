@@ -31,6 +31,9 @@ flask bootstrap doc: https://pythonhosted.org/Flask-Bootstrap/basic-usage.html
 
 create relational db: https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#a-minimal-application
 
+install mysql on localhost:MAC OS: https://www.youtube.com/watch?v=UcpHkYfWarM
+
+
 
 
 
