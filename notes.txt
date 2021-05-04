@@ -32,6 +32,31 @@ flask bootstrap doc: https://pythonhosted.org/Flask-Bootstrap/basic-usage.html
 create relational db: https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#a-minimal-application
 
 install mysql on localhost:MAC OS: https://www.youtube.com/watch?v=UcpHkYfWarM
+steps:
+1. under Mysql terminal, do:
+CREATE DATABASE app;
+2. under flask shell, do:
+db.create_all()
+3. under ven, do:
+flask run 
+
+
+###############
+#front end design useful tips
+insert image from local:https://kanchanardj.medium.com/how-to-add-images-to-html-in-a-flask-app-4dbcc92e3aeb
+
+pie charts:https://www.w3schools.com/howto/howto_google_charts.asp
+
+add static folder into flask:
+https://stackoverflow.com/questions/20646822/how-to-serve-static-files-in-flask
+
+locate a component in bootstrap 4:
+https://getbootstrap.com/docs/4.0/utilities/float/#responsive
+
+
+
+
+########################
 
 
 

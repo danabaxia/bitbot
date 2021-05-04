@@ -1,7 +1,135 @@
-{% extends "base_user.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        body {
+          background-color: rgb(244,247,252);
 
-{% block content %}
+        }
 
-    <h5>under construction...</h5>
-
-{% endblock %}
+        .card:hover{
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+        }
+        span{
+          font-size: 75%;
+          color:green;
+          margin-top: -5;
+        }
+        button{
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <ul class="nav nav-pills" style="background-color: #e3f2fd;">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="#" href="{{url_for('position',username=current_user.username)}}">Portfolio</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">Activities</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('analysis',username=current_user.username)}}">Strategy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Notification</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li>
+    </ul>   
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5>Portfolio Balance</h5>
+                <div class="row">
+                    <div class="col">
+                        <h3 class="card-title">$ {{ balance.cash_balance + balance.bitcoin_value}} <span>+5%</span></h3>  
+                    </div>
+                    <div class="col">
+                        <ul class="nav justify-content-end">
+                            <li class="nav-item">
+                              <a class="nav-link active" href="#">1D</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">1M</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">1Y</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">ALL</a>
+                            </li>
+                          </ul>
+                    </div>
+                </div>
+            <div id="chart_div"></div>
+            <script type="text/javascript" src="../../js/line_chart_full.js" data="data"></script>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Assets</h5>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Asset</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Allocation</th>
+                    <th scope="col">Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">US Dollar</th>
+                    <th scope="col"></th>
+                    <th scope="col">400</th>
+                    <th scope="col">40%</th>
+                    <th>
+                        <button class="btn btn-primary">Transform</button>
+                        <button class="btn btn-primary">Withdraw</button>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th scope="row">Bitcoin</th>
+                    <th scope="col">0.001</th>
+                    <th scope="col">200</th>
+                    <th scope="col">20%</th>
+                    <th>
+                        <button class="btn btn-primary">Buy</button>
+                        <button class="btn btn-primary">Sell</button>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th scope="row">Hedge Fund</th>
+                    <th scope="col">4</th>
+                    <th scope="col">400</th>
+                    <th scope="col">40%</th>
+                    <th>
+                        <button class="btn btn-primary">Check</button>
+                    </th>
+                  </tr>
+                </tbody>
+  
+              </table>
+            </div>
+        </div>
+    </div> 
+</body>
+</html>

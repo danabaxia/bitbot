@@ -6,9 +6,10 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_socketio import SocketIO
+from flask import send_from_directory
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -20,3 +21,4 @@ socketio = SocketIO(app)
 
 
 from flaskr import routes, models, errors
+

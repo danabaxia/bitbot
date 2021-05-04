@@ -1,7 +1,553 @@
-{% extends "base_user.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!--Bootstrap 5.0-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <!--get icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            background-color: rgb(244,247,252);
 
-{% block content %}
+        }
 
-    <h5>under construction...</h5>
+        .card:hover{
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+        }
+        span{
+          font-size: 75%;
+          color:green;
+          margin-top: -5;
+        }
+        button{
+            width: 100px;
+        }
+        h6{
+            font-style: italic;
+            color:gray
+        }
+        h3{
+            font-style:initial
+        }
+        
+    </style>
+</head>
+<body>
+    <ul class="nav nav-pills" style="background-color: #e3f2fd;">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="#" href="{{url_for('position',username=current_user.username)}}">Portfolio</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">Activities</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{{url_for('analysis',username=current_user.username)}}">Strategy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Notification</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li>
+    </ul> 
+    <div class="container">
+        <div class="card-deck" style="margin-top: 10px; height: 500px;">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">Buy options</h3>
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <h4>Market Order</h4>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <h5>Buy in Dollars</h5>
+                            <h6>Buy Bitcoin dollar amounts starting at $1</h6>
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#buy_in_dollar">Buy now</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>Buy in Amounts</h5>
+                            <h6>Buy Bitcoin dollar amounts starting at 0.1</h6>
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#buy_in_amount">Buy now</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <h4>Conditional Order</h4>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <h5>Recurring Investment</h5>
+                            <h6>Invest on a recurring schedule</h6>
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#buy_recurring">Buy now</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>Limit Order</h5>
+                            <h6>Buy at a maximum price or lower</h6>
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#buy_limit_order">Buy now</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>Stop Order</h5>
+                            <h6>If rising to a fixed stop price, trigger a market buy</h6>
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#buy_stop_order">Buy now</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Sell options</h3>
+                  <table class="table table-hover">
+                      <thead class="thead-light">
+                      <tr>
+                          <h4>Market Order</h4>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                          <td>
+                              <h5>Sell in Dollars</h5>
+                              <h6>Sell Bitcoin dollar amounts starting at $1</h6>
+                          </td>
+                          <td>
+                          <button type="button" class="btn btn-link float-right" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#sell_in_dollar">Sell now</button>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              <h5>Sell in Amounts</h5>
+                              <h6>Sell Bitcoin dollar amounts starting at 0.1</h6>
+                          </td>
+                          <td>
+                          <button type="button" class="btn btn-link float-right" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#sell_in_amount">Sell now</button>
+                          </td>
+                      </tr>
+                      </tbody>
+                  </table>
+                  <table class="table table-hover">
+                      <thead class="thead-light">
+                      <tr>
+                          <h4>Conditional Order</h4>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                          <td>
+                              <h5>Trailing Stop Order</h5>
+                              <h6>Trigger a market order if below its highest price by:</h6>
+                          </td>
+                          <td>
+                          <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#sell_trailing_stop">Sell now</button>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              <h5>Limit Order</h5>
+                              <h6>Sell at a minimum price or higher</h6>
+                          </td>
+                          <td>
+                          <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#sell_limit_order">Sell now</button>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              <h5>Stop Order</h5>
+                              <h6>If falling to a fixed stop price, trigger a market sell</h6>
+                          </td>
+                          <td>
+                          <button type="button" class="btn btn-link float-right" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#sell_stop_order">Sell now</button>
+                          </td>
+                      </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+        </div>
+        <div class="card" style="margin-top: 90px;">
+            <div class="card-body">
+              <h3 class="card-title">Community Hedge Invest</h3>
+              <table class="table table-hover">
+                  <thead class="thead-light">
+                  <tr>
+                      <th>Trader</th>
+                      <th>Start by</th>
+                      <th>Last Seen</th>
+                      <th>Return</th>
+                      <th>Followers#</th>
+                      <th>Fund Size</th>
+                      <th>Risk</th>
+                      <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                      <th>Jacob</th>
+                      <th>01-04-2020</th>
+                      <th>04-30-2021</th>
+                      <th>50%</th>
+                      <th>100</th>
+                      <th>10,000</th>
+                      <th>7</th>
+                      <td>
+                      <button type="button" class="btn btn-link float-right" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#follow">Follow</button>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Chuck</th>
+                      <th>01-04-2020</th>
+                      <th>04-30-2021</th>
+                      <th>50%</th>
+                      <th>100</th>
+                      <th>10,000</th>
+                      <th>9</th>
+                      <td>
+                      <button type="button" class="btn btn-link float-right" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#unfollow">Unfollow</button>
+                      </td>
+                  </tr>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+    </div>
 
-{% endblock %}
+    <!-- 
+        Modal tables 
+    -->
+  
+  <!-- Modal -->
+  <!-- Modal Buy-->
+  <div class="modal fade" id="buy_in_dollar" tabindex="-1" aria-labelledby="buy_in_dollar" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Buy in Dollars</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5>Market Price($): 60000</h5>
+          <label for="amount" class="form-label">Amount($)</label>
+          <input type="text" id="amount" class="form-control">
+          <h6>$ 1000 availabe to buy bitcoin</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Buy in amounts-->
+  <div class="modal fade" id="buy_in_amount" tabindex="-1" aria-labelledby="buy_in_amount" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Buy in Amount</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5>Market Price($): 60000</h5>
+          <label for="amount" class="form-label">Amount(#)</label>
+          <input type="text" id="amount" class="form-control">
+          <h6># 0.001 availabe to buy bitcoin</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Buy recurring-->
+  <div class="modal fade" id="buy_recurring" tabindex="-1" aria-labelledby="buy_recurring" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Setting investment schedule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <label for="amount" class="form-label">Amount($)</label>
+            <input type="text" id="amount" class="form-control">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="daily">
+                <label class="form-check-label" for="daily">
+                  Daily
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="weekly">
+                <label class="form-check-label" for="weekly">
+                  Weekly
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="monthly" checked>
+                <label class="form-check-label" for="monthly">
+                  Monthly
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Buy Limit order -->
+  <div class="modal fade" id="buy_limit_order" tabindex="-1" aria-labelledby="buy_limit_order" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Buy Limit Order</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label for="limit_price" class="form-label">Set Limit Price($)</label>
+          <h6>Maximum price you are willing to buy at</h6>
+          <input type="text" id="limit_price" class="form-control">
+          <h6>Current Market Price($): 60000</h6>
+          <label for="amount" class="form-label">Amount($)</label>
+          <h6>Amount you are willing to buy</h6>
+          <input type="text" id="amount" class="form-control">
+          <h6>$ 1000 availabe to buy bitcoin</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Buy stop order-->
+  <div class="modal fade" id="buy_stop_order" tabindex="-1" aria-labelledby="buy_stop_order" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Buy Limit Order</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label for="limit_price" class="form-label">Set Stop Price($)</label>
+          <h6>Trigger a market buy order if prices rises up to:</h6>
+          <input type="text" id="limit_price" class="form-control">
+          <h6>Current Market Price($): 60000</h6>
+          <label for="amount" class="form-label">Amount($)</label>
+          <h6>Amount you are willing to buy</h6>
+          <input type="text" id="amount" class="form-control">
+          <h6>$ 1000 availabe to buy bitcoin</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Sell-->
+  <div class="modal fade" id="sell_in_dollar" tabindex="-1" aria-labelledby="sell_in_dollar" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sell in Dollars</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Market Price($): 60000</h6>
+          <label for="amount" class="form-label">Amount($)</label>
+          <input type="text" id="amount" class="form-control">
+          <h6>$ 1000 availabe to sell</h6>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Sell in amounts-->
+  <div class="modal fade" id="sell_in_amount" tabindex="-1" aria-labelledby="sell_in_amount" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sell in Amount</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Market Price($): 60000</h6>
+          <label for="amount" class="form-label">Amount(#)</label>
+          <input type="text" id="amount" class="form-control">
+          <h6># 0.001 bitcoin availabe to sell</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Sell trailing stop order-->
+  <div class="modal fade" id="sell_trailing_stop" tabindex="-1" aria-labelledby="sell_trailing_stop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Sell Trailing Stop Order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label for="limit_price" class="form-label">Set Trail Percentage(%)</label>
+            <h6>Trigger a market sell order if price falls below its highest price by:</h6>
+            <input type="text" id="limit_price" class="form-control">
+            <h6>Initial Stop Price($): 40000</h6>
+            <h6>Current Market Price($): 60000</h6>
+            <label for="amount" class="form-label">Amount($)</label>
+            <h6>Amount you are willing to sell</h6>
+            <input type="text" id="amount" class="form-control">
+            <h6>$ 1000 bitcoin availabe to sell</h6>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!--Sell Limit order -->
+  <div class="modal fade" id="sell_limit_order" tabindex="-1" aria-labelledby="sell_limit_order" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sell Limit Order</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label for="limit_price" class="form-label">Set Limit Price($)</label>
+          <h6>Minimum price you are willing to sell at</h6>
+          <input type="text" id="limit_price" class="form-control">
+          <h6>Current Market Price($): 60000</h6>
+          <label for="amount" class="form-label">Amount($)</label>
+          <h6>Amount you are willing to sell</h6>
+          <input type="text" id="amount" class="form-control">
+          <h6>$ 1000 bitcoin availabe to sell</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Sell stop order-->
+  <div class="modal fade" id="sell_stop_order" tabindex="-1" aria-labelledby="sell_stop_order" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sell Limit Order</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label for="limit_price" class="form-label">Set Stop Price($)</label>
+          <h6>Trigger a market sell order if price falls to:</h6>
+          <input type="text" id="limit_price" class="form-control">
+          <h6>Current Market Price($): 60000</h6>
+          <label for="amount" class="form-label">Amount($)</label>
+          <h6>Amount you are willing to sell</h6>
+          <input type="text" id="amount" class="form-control">
+          <h6>$ 1000 bitcoin availabe to sell</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--follow modal-->
+  <div class="modal fade" id="follow" aria-labelledby="follow" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Follow</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--unfollow modal-->
+  <div class="modal fade" id="unfollow" aria-labelledby="unfollow" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Unfollow</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+</body>

@@ -35,8 +35,10 @@ class User(UserMixin, db.Model):
 
 class Balance(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
     cash_balance = db.Column(db.Float, default=0)
     bitcoin_value = db.Column(db.Float, default=0)
+    bitcoin_amount = db.Column(db.Float, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
     user = db.relationship('User',

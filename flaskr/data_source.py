@@ -44,6 +44,10 @@ def add_data():
             new_entry = BitPrice(row[0], row[1], dateutil.parser.parse(row[2]))
             db.session.add(new_entry)
             db.session.commit()  
+    print('finished')
 
 if __name__ == '__main__':
-    print(get_cypto_price())
+    #while True: 
+    price = get_cypto_price()
+        #add_data()
+    print('bit price ', price)

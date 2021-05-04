@@ -1,38 +1,89 @@
-{% extends "base_user.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activities</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+      body {
+          background-color: rgb(244,247,252);
 
-{% block content %}
-<div class="container-fluid">
-<div class="row">
-  <div class="col-sm-2">
-    <label for="symbol" class="form-label">From</label>
+      }
+
+      .card:hover{
+          transform: scale(1.05);
+          box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+      }
+      button {
+        background-color:rgb(11, 97, 255)
+      }
+  </style>
+</head>
+<body>
+  <ul class="nav nav-pills" style="background-color: #e3f2fd;">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('position',username=current_user.username)}}">Portfolio</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">Activities</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('analysis',username=current_user.username)}}">Strategy</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Notification</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+    </li>
+  </ul>
+  
+  <div class="container">
+    <h3>Transfer/Withdraw</h3>
+    <div class="row">
+      <div class="col-sm-2">
+        <label for="symbol" class="form-label">From</label>
+      </div>
+      <div class="col-sm-4">
+        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+            <option selected value="1">Bank XXXX</option>
+            <option value="2">Wallet</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-sm-2">
+      <label for="symbol" class="form-label">To</label>
+    </div>
+    <div class="col-sm-4">
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+          <option selected value="1">Wallet</option>
+          <option value="2">Bank XXXX</option>
+      </select>
+    </div>
+    </div>
+    <form action="#" method="post">
+      {{  form.hidden_tag()  }}
+      <p>
+        {{  form.cash.label  }}
+        ($)
+        {{  form.cash}}
+      </p>
+      <p>{{  form.submit()  }}</p>
+    </form>
+
   </div>
-  <div class="col-sm-4">
-    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-        <option selected value="1">Bank XXXX</option>
-        <option value="2">Wallet</option>
-    </select>
-  </div>
-</div>
-<div class="row">
-<div class="col-sm-2">
-  <label for="symbol" class="form-label">To</label>
-</div>
-<div class="col-sm-4">
-  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-      <option selected value="1">Wallet</option>
-      <option value="2">Bank XXXX</option>
-  </select>
-</div>
-</div>
-<form action="#" method="post">
-  {{  form.hidden_tag()  }}
-  <p>
-    {{  form.cash.label  }}
-    {{  form.cash}}
-  </p>
-  <p>{{  form.submit()  }}</p>
-</form> 
-</div>
-{% endblock %}
+</body>
 
     
