@@ -14,6 +14,8 @@ from flaskr.forms import EditProfileForm
 import flaskr.data_source as bt 
 from flaskr import socketio
 from flask_socketio import SocketIO, send 
+from flask import jsonify
+import json
 
 
 
@@ -47,7 +49,6 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        print('user',user.username)
         if user is None or not user.check_password(form.password.data):
             flash('invalid username or password')
             return redirect(url_for('login'))
@@ -94,15 +95,12 @@ def user(username):
 @app.route('/user/<username>/summary', methods=['GET', 'POST'])
 @login_required
 def summary(username):
-    #bit_day = bt.request_CyptoPrice_day()['close']
-    #print(bit_day)
+    value = bt.request_CyptoPrice_day()
     user = User.query.filter_by(username=username).first_or_404()
     balance= user.balance[-1]
     cash = user.balance[-1].cash_balance
     bit = user.balance[-1].bitcoin_value
-    for b in user.balance:
-        print('date', b.date)
-    return render_template('summary.html',balance=balance)
+    return render_template('summary.html',balance=balance,value=value)
 
 @app.route('/user/<username>/position')
 @login_required
@@ -128,16 +126,16 @@ def trade(username):
     form = TransactionForm()
     if request.method == "POST":
         user = User.query.filter_by(username=username).first()
-        user.balance[0].cash_balance -= form.amount.data
-        user.balance[0].bitcoin_value += form.amount.data
-        db.session.commit() 
-        print('amount',form.amount.data)
-        print('price', form.price.data)
-        transaction = Transaction(amount=form.amount.data, action='Buy',
+        cash = user.balance[-1].cash_balance - form.amount.data
+        bitcoin_value = user.balance[-1].bitcoin_value + form.amount.data
+        bitcoin_amount = user.balance[-1].bitcoin_amount + form.amount.data/bt.get_cypto_price()
+        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+        Transaction(amount=form.amount.data, action='Buy',
                                   order='Limit',price=form.price.data,status='Filing', user=user)
-        db.session.add(transaction)
+        db.session.add(user)
         db.session.commit() 
-        return render_template('summary.html', cash=user.balance[0].cash_balance, bit=user.balance[0].bitcoin_value)
+        balance = user.balance[-1]
+        return render_template('summary.html', cash=cash, bit=bitcoin_value, balance=balance)
 
 
     return render_template('trade.html', form=form)

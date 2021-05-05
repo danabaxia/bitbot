@@ -58,6 +58,19 @@ https://getbootstrap.com/docs/4.0/utilities/float/#responsive
 
 ########################
 
+database filter by dates:
+https://stackoverflow.com/questions/51451768/sqlalchemy-querying-with-datetime-columns-to-filter-by-month-day-year
+
+pass value from flask to js file
+
+pass data from mysql to google charts
+https://stackoverflow.com/questions/33444115/passing-mysql-data-from-flask-to-javascript-for-google-charts
+
+convert json to array
+https://stackoverflow.com/questions/14528385/how-to-convert-json-object-to-javascript-array
+
+favicon.ico not found issue:
+https://stackoverflow.com/questions/31075893/im-getting-favicon-ico-error
 
 
 

@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "env/bin/python",
+    "python.pythonPath": "ven\\Scripts\\python.exe",
     "python.autoComplete.extraPaths": [
         "ven/bin/flask"
     ],

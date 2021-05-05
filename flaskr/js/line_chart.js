@@ -1,19 +1,25 @@
 /*pass data to this js  */
-document.currentScript.getAttribute('data');
 
 google.charts.load('current', {packages: ['corechart', 'line']});
 google.charts.setOnLoadCallback(drawLogScales);
 
+
+console.log(typeof frequency);
+console.log( typeof value );
+var obj = JSON.parse(value)
+console.log(typeof obj)
+console.log(obj)
+
+var result = [];
+for(var i in obj)
+    result.push([i, obj [i]]);
+console.log(result);
+
 function drawLogScales() {
       var data = new google.visualization.DataTable();
-      data.addColumn('number', 'X');
-      data.addColumn('number', 'Dogs');
-
-      data.addRows([
-        [0, 100],    [1, 100],   [2, 150],  [3, 150],   [4, 200],  [5, 200]
-
-      ]);
-
+      data.addColumn('string', 'Time');
+      data.addColumn('number', 'Price');
+      data.addRows(result);
       var options = {
             legend: {position: 'none'},
             width: 500,
@@ -23,7 +29,7 @@ function drawLogScales() {
               gridlines: {
                   color: 'transparent'
               },
-              logScale: true
+              logScale: false
             },
             vAxis: {
                 gridlines: {
