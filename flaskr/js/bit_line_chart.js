@@ -19,7 +19,7 @@ function json2array(json_data){
 
 function drawCharts() {
   
-      //console.log(result);
+      console.log('btc chart');
       //day
       var data_d = new google.visualization.DataTable();
       data_d.addColumn('string', 'date');
@@ -76,21 +76,67 @@ function drawCharts() {
 
       document.getElementById('btc_d').addEventListener('click', function (){
         console.log('day data');
+        var elem = document.getElementById('btc_change');
+        elem.textContent = change_d;
+        var a = parseFloat(elem.textContent)
+        console.log(typeof a);
+        if (a<0){
+          elem.classList.remove('green');
+          elem.textContent = elem.textContent + '%';
+        }else {
+          elem.textContent = '+' + elem.textContent + '%';
+          elem.classList.add('green');
+        }
+
         chart.draw(data_d, options);
+
       }, false);
 
       document.getElementById('btc_m').addEventListener('click', function (){
         console.log('month data');
+        var elem = document.getElementById('btc_change');
+        elem.textContent = change_m;
+        var a = parseFloat(elem.textContent)
+        console.log(typeof a);
+        if (a<0){
+          elem.classList.remove('green');
+          elem.textContent = elem.textContent + '%';
+        }else {
+          elem.textContent = '+' + elem.textContent + '%';
+          elem.classList.add('green');
+        }
         chart.draw(data_m, options);
       }, false);
 
       document.getElementById('btc_y').addEventListener('click', function (){
         console.log('year data');
+        var elem = document.getElementById('btc_change');
+        elem.textContent = change_y;
+        var a = parseFloat(elem.textContent)
+        console.log(typeof a);
+        if (a<0){
+          elem.classList.remove('green');
+          elem.textContent = elem.textContent + '%';
+        }else {
+          elem.textContent = '+' + elem.textContent + '%';
+          elem.classList.add('green');
+        }
         chart.draw(data_y, options);
       }, false);
 
       document.getElementById('btc_all').addEventListener('click', function (){
         console.log('all data');
+        var elem = document.getElementById('btc_change');
+        elem.textContent = change_all;
+        var a = parseFloat(elem.textContent)
+        console.log(typeof a);
+        if (a<0){
+          elem.classList.remove('green');
+          elem.textContent = elem.textContent + '%';
+        }else {
+          elem.textContent = '+' + elem.textContent + '%';
+          elem.classList.add('green');
+        }
         chart.draw(data_all, options);
       }, false);
 

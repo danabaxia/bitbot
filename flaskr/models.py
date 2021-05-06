@@ -39,6 +39,7 @@ class Balance(UserMixin, db.Model):
     cash_balance = db.Column(db.Float, default=0)
     bitcoin_value = db.Column(db.Float, default=0)
     bitcoin_amount = db.Column(db.Float, default=0)
+    hedge = db.Column(db.Float, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
     user = db.relationship('User',
@@ -89,21 +90,21 @@ class Strategy(UserMixin, db.Model):
         return '<Strategy: {}>'.format(self.strategy_name)
     
 class BitPrice(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    exchange = db.Column(db.String(64))  
-    price = db.Column(db.String(64))     
+    id = db.Column(db.Integer, primary_key=True) 
+    symbol = db.Column(db.String(64), default='BTC')
+    price = db.Column(db.Float)     
     horah = db.Column(db.DateTime)
 
-    def __init__(self, exchange, price, horah):
-        self.exchange = exchange
+    def __init__(self, price, horah):
         self.price = price
         if horah is None:
             horah = datetime.utcnow()
         self.horah = horah
-
     def __repr__(self):
-        return '<Exchange {}>'.format(self.exchange)
+        return '<Symbol: {}>'.format(self.symbol)
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+

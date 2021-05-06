@@ -1,6 +1,4 @@
-/*pass data to this js  */
-
-google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.load('current', {packages: ['corechart', 'line'], callback:'drawLogScales'});
 google.charts.setOnLoadCallback(drawLogScales);
 
 var obj = JSON.parse(value_d)
@@ -8,7 +6,7 @@ var obj = JSON.parse(value_d)
 var result = [];
 for(var i in obj)
     result.push([i, obj [i]]);
-console.log(result);
+
 
 function drawLogScales() {
       var data = new google.visualization.DataTable();
@@ -38,6 +36,6 @@ function drawLogScales() {
             chartArea: { width: '100%', height:'90%'}
       };
 
-      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      var chart = new google.visualization.LineChart(document.getElementById('chart_balance'));
       chart.draw(data, options);
     }

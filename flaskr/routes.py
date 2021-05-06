@@ -96,17 +96,19 @@ def user(username):
 @app.route('/user/<username>/summary', methods=['GET', 'POST'])
 @login_required
 def summary(username):
-    value = {}  #dict of all time frames of date needed
+    #sample data of btc
     value_day = bt.request_CyptoPrice_hour(24)
     value_week = bt.request_CyptoPrice_day(7)
     value_month = bt.request_CyptoPrice_day(30)
     value_year = bt.request_CyptoPrice_day(365)
     value_all = bt.request_CyptoPrice_day()
     hourly_value = bt.request_CyptoPrice_hour()
+    #sample data of bit_value
     user = User.query.filter_by(username=username).first_or_404()
     balance= user.balance[-1]
     cash = user.balance[-1].cash_balance
     bit = user.balance[-1].bitcoin_value
+    bit_amount = user.balance[-1].bitcoin_amount
     btc_now = bt.get_cypto_price()
     change_d = round((btc_now - list(value_day.items())[-1][1])/list(value_day.items())[-1][1] * 100,2)
     change_m = round((btc_now - list(value_month.items())[-1][1])/list(value_month.items())[-1][1] * 100,2)
@@ -142,6 +144,7 @@ def trade(username):
     if request.method == "POST":
         user = User.query.filter_by(username=username).first()
         cash = user.balance[-1].cash_balance - form.amount.data
+        print('cash', cash)
         bitcoin_value = user.balance[-1].bitcoin_value + form.amount.data
         bitcoin_amount = user.balance[-1].bitcoin_amount + form.amount.data/bt.get_cypto_price()
         Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
@@ -150,7 +153,7 @@ def trade(username):
         db.session.add(user)
         db.session.commit() 
         balance = user.balance[-1]
-        return render_template('summary.html', cash=cash, bit=bitcoin_value, balance=balance)
+        return render_template('trade.html', form=form)
 
 
     return render_template('trade.html', form=form)
@@ -200,12 +203,6 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
-@app.route('/test', methods=["GET","POST"])
-def test():
-    if request.method == "POST":
-        return 'this is post'
-    return render_template('test.html')
-
 
 @app.route('/user/<username>/transfer', methods=["GET","POST"])
 @login_required
@@ -226,3 +223,4 @@ def transfer(username):
         print(balance.cash_balance)
         return redirect(url_for('summary',username=username))
     return render_template('transfer.html', form=form)
+

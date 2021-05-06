@@ -1,14 +1,14 @@
 // Load google charts
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart);
-        
+      
 // Draw the chart and set the chart values
 function drawChart() {
     var data = google.visualization.arrayToDataTable([
     ['Task', 'Portfolio'],
-    ['Cash', 200],
-    ['Bitcoin', 100],
-    ['Hedge Fund',50]
+    ['Cash', parseFloat(cash)],
+    ['Bitcoin', parseFloat(bit)],
+    ['Hedge Fund',parseFloat(hedge)]
     ]);
         
     // Optional; add a title and set the width and height of the chart

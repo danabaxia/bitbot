@@ -1,6 +1,8 @@
 import requests 
 import json
 import pandas as pd 
+from flaskr.models import User, Transaction, Balance, BitPrice
+from datetime import datetime
 
 key = '3711ff28a46fd9f7cbc915ca70a67b30'
 #get cypto historical prices 
@@ -46,6 +48,8 @@ def get_cypto_price():
             
 
 
+        
+
 
 if __name__ == '__main__':
-    get_cypto_price()
+    print('nothing')
