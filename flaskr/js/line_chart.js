@@ -3,12 +3,7 @@
 google.charts.load('current', {packages: ['corechart', 'line']});
 google.charts.setOnLoadCallback(drawLogScales);
 
-
-console.log(typeof frequency);
-console.log( typeof value );
-var obj = JSON.parse(value)
-console.log(typeof obj)
-console.log(obj)
+var obj = JSON.parse(value_d)
 
 var result = [];
 for(var i in obj)

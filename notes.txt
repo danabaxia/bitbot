@@ -72,6 +72,10 @@ https://stackoverflow.com/questions/14528385/how-to-convert-json-object-to-javas
 favicon.ico not found issue:
 https://stackoverflow.com/questions/31075893/im-getting-favicon-ico-error
 
+js date format:
+https://stackoverflow.com/questions/2013255/how-to-get-year-month-day-from-a-date-object
+
+
 
 
 

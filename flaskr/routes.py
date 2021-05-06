@@ -19,6 +19,7 @@ import json
 
 
 
+
 @app.route('/js/<path:path>')
 def send_js(path):
     return send_from_directory('js', path)
@@ -95,12 +96,26 @@ def user(username):
 @app.route('/user/<username>/summary', methods=['GET', 'POST'])
 @login_required
 def summary(username):
-    value = bt.request_CyptoPrice_day()
+    value = {}  #dict of all time frames of date needed
+    value_day = bt.request_CyptoPrice_hour(24)
+    value_week = bt.request_CyptoPrice_day(7)
+    value_month = bt.request_CyptoPrice_day(30)
+    value_year = bt.request_CyptoPrice_day(365)
+    value_all = bt.request_CyptoPrice_day()
+    hourly_value = bt.request_CyptoPrice_hour()
     user = User.query.filter_by(username=username).first_or_404()
     balance= user.balance[-1]
     cash = user.balance[-1].cash_balance
     bit = user.balance[-1].bitcoin_value
-    return render_template('summary.html',balance=balance,value=value)
+    btc_now = bt.get_cypto_price()
+    change_d = round((btc_now - list(value_day.items())[-1][1])/list(value_day.items())[-1][1] * 100,2)
+    change_m = round((btc_now - list(value_month.items())[-1][1])/list(value_month.items())[-1][1] * 100,2)
+    change_y = round((btc_now - list(value_year.items())[-1][1])/list(value_year.items())[-1][1] * 100,2)
+    change_all = round((btc_now - list(value_all.items())[-1][1])/list(value_all.items())[-1][1] * 100,2)
+    return render_template('summary.html',balance=balance, 
+                           value_all=value_all, value_day=value_day, value_month=value_month, 
+                           value_week=value_week, value_year=value_year, btc_now=btc_now,
+                           change_d=change_d, change_m=change_m, change_y= change_y, change_all=change_all)
 
 @app.route('/user/<username>/position')
 @login_required

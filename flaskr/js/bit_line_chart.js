@@ -1,24 +1,61 @@
-google.charts.load('current', {packages: ['corechart', 'line']});
-google.charts.setOnLoadCallback(drawLogScales);
+google.charts.load('current', {packages: ['corechart', 'line'],callback: 'drawCharts'});
 
-function drawLogScales() {
-      var data = new google.visualization.DataTable();
-      data.addColumn('number', 'X');
-      data.addColumn('number', 'Dogs');
+function json2array(json_data){
+  var obj = JSON.parse(json_data);
+  var result = [];
+  for(var i in obj){
+    var d = new Date(i);
+    var minute = d.getUTCMinutes();
+    var hour = d.getUTCHours();
+    var day = d.getUTCDate();
+    var month = d.getUTCMonth();
 
-      data.addRows([
-        [0, 100],    [1, 100],   [2, 150],  [3, 150],   [4, 200],  [5, 200]
+    _date = month + "/" + day;
+    //console.log(_date);
+    result.push([_date, obj[i]])
+  }
+  return result;
+}
 
-      ]);
+function drawCharts() {
+  
+      //console.log(result);
+      //day
+      var data_d = new google.visualization.DataTable();
+      data_d.addColumn('string', 'date');
+      data_d.addColumn('number', 'Price');
+      data_d.addRows(json2array(value_d));
+     
+      var data_m = new google.visualization.DataTable();
+      data_m.addColumn('string', 'date');
+      data_m.addColumn('number', 'Price');
+      data_m.addRows(json2array(value_m));
+
+      var data_y = new google.visualization.DataTable();
+      data_y.addColumn('string', 'date');
+      data_y.addColumn('number', 'Price');
+      data_y.addRows(json2array(value_y));
+
+      var data_all = new google.visualization.DataTable();
+      data_all.addColumn('string', 'date');
+      data_all.addColumn('number', 'Price');
+      data_all.addRows(json2array(value_all));
+
+
+
 
       var options = {
             legend: {position: 'none'},
             height:320,
             hAxis: {
               curveType: 'function',
+              textPosition: 'none',
               gridlines: {
-                  color: 'transparent'
+                  color: 'transparent',
+                  minSpacing: 100,
+                  count:1
               },
+              showTextEvery:100,
               logScale: true
             },
             vAxis: {
@@ -35,5 +72,27 @@ function drawLogScales() {
       };
 
       var chart = new google.visualization.LineChart(document.getElementById('chart_btc'));
-      chart.draw(data, options);
-    }
+      chart.draw(data_d, options);
+
+      document.getElementById('btc_d').addEventListener('click', function (){
+        console.log('day data');
+        chart.draw(data_d, options);
+      }, false);
+
+      document.getElementById('btc_m').addEventListener('click', function (){
+        console.log('month data');
+        chart.draw(data_m, options);
+      }, false);
+
+      document.getElementById('btc_y').addEventListener('click', function (){
+        console.log('year data');
+        chart.draw(data_y, options);
+      }, false);
+
+      document.getElementById('btc_all').addEventListener('click', function (){
+        console.log('all data');
+        chart.draw(data_all, options);
+      }, false);
+
+
+    };

@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <link rel="shortcut icon" href="#">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        var value= '{{ value|tojson|safe }}'
+    
+        var value_d= '{{ value_day|tojson|safe }}'
+        var value_m = '{{ value_month|tojson|safe }}'
+        var value_y = '{{ value_year|tojson|safe }}'
+        var value_all = '{{ value_all|tojson|safe }}'
         
     </script>
     <style>
@@ -21,11 +26,15 @@
             transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
         }
-        span{
+        .change{
           font-size: 75%;
-          color:green;
+          color:#FF0000;
           margin-top: -5;
         }
+        .change.green{
+          color:green;
+        }
+        
     </style>
 </head>
 <body>
@@ -62,7 +71,7 @@
               <h5>Portfolio Balance</h5>
               <div class="row">
                   <div class="col">
-                      <h3 class="card-title">$ {{ balance.cash_balance + balance.bitcoin_value}} <span>+5%</span></h3>  
+                      <h3 class="card-title">$ {{ balance.cash_balance + balance.bitcoin_value}} <span class='change'>5%</span></h3>  
                   </div>
                   <div class="col">
                     <ul class="nav justify-content-end">
@@ -70,7 +79,12 @@
                           <a class="nav-link active" href="#">1D</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="#">1M</a>
+                          <a class="nav-link" id="b_m" href="#">1M</a>
+                          <script>
+                            $('#b_m').on('click', function (e){
+                              window.alert('month balance');
+                            })
+                          </script>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="#">1Y</a>
@@ -102,21 +116,21 @@
             <h6>Bitcoin</h6>
             <div class="row">
             <div class="col">
-                <h2 class="card-title">$ 60000<span> +0.5%</span></h2>
+                <h2 class="card-title">$ {{ btc_now }} <span class="change"> {{ change_d }}%</span></h2>
             </div>
             <div class="col">
-                <ul class="nav justify-content-end">
+                <ul class="nav nav-pills justify-content-end" id="btc_tabs">
                     <li class="nav-item">
-                      <a class="nav-link active" href="#">1D</a>
+                      <a class="nav-link active" id="btc_d" data-toggle="pill" role="tab" href="#1D" aria-controls="1D" aria-selected="true">1D</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">1M</a>
+                      <a class="nav-link" id="btc_m" data-toggle="pill" role="tab" href="#1M" aria-controls="1M" aria-selected="false">1M</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">1Y</a>
+                      <a class="nav-link" id="btc_y" data-toggle="pill" role="tab" href="#1Y" aria-controls="1Y" aria-selected="false">1Y</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">ALL</a>
+                      <a class="nav-link" id="btc_all" data-toggle="pill" role="tab" href="#ALL" aria-controls="ALL" aria-selected="false">ALL</a>
                     </li>
                   </ul>
               </div>
@@ -182,7 +196,26 @@
     </div>
     </div>
 
+    <script>
+      $(".nav .nav-link").on("click", function(){
+      $(".nav").find(".active").removeClass("active");
+      $(this).addClass("active");
+      });
+    </script>
 
+    <script>
+      var els = document.getElementsByClassName('change');
+      for (var i=0; i < els.length; i++){
+        var cell = els[i];
+        console.log(cell.textContent)
+        if (cell.textContent < 0){
+          cell.classList.remove('green')
+        }else {
+          console.log('add green')
+          cell.classList.add('green');
+        }
+      }
+    </script>
     
     
 </body>
