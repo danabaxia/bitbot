@@ -1,5 +1,5 @@
 from datetime import datetime
-from flaskr import db
+from flaskr import db, db_nosql
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flaskr import login_manager
@@ -48,7 +48,11 @@ class Balance(UserMixin, db.Model):
     def __repr__(self):
         return '<Balance: {}>'.format(self.id)
 
-
+"""
+order: market,limit,stop,recurring, hedge 
+action: buy, sell
+status: filling, complete
+"""
 class Transaction(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -102,6 +106,52 @@ class BitPrice(db.Model):
         self.horah = horah
     def __repr__(self):
         return '<Symbol: {}>'.format(self.symbol)
+
+##############
+#Nosql db
+"""
+maket order
+{
+    "_id": 111,
+    "user": "admin",
+    "date":       ,
+    "type": 
+    "amount":      ,
+    "price":
+    "status":
+}
+
+limit order 
+{
+    "_id": ,
+    "user":,
+    "date":,
+    "type":,
+    "amount":,
+    "limit_price":,
+    "status":
+}
+
+stop order
+{
+    "_id":,
+    "user":,
+    "date":,
+    "type":,
+    "amount":,
+    "stop_price":,
+    "status":
+}
+"""
+class Order_market(db_nosql.Document):
+    id = db_nosql.IntField()
+    name = db_nosql.StringField()
+
+    def to_json(self):
+        return { "id": self.id, 
+                 "name": self.name}
+
+
 
 @login_manager.user_loader
 def load_user(id):
