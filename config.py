@@ -9,3 +9,5 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     #email
     ADMINS = ['danabaxia@gmail.com']
+    #mongoDB
+    MONGO_URI = 'mongodb+srv://bobo1314:Hjb1314$@cluster0.c7xci.mongodb.net/app?retryWrites=true&w=majority'

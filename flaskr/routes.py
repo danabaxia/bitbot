@@ -8,7 +8,7 @@ from flaskr.models import User, Transaction, Balance
 from flask_login import logout_user
 from flask import request
 from werkzeug.urls import url_parse
-from flaskr import db
+from flaskr import db, mongo
 from datetime import datetime
 from flaskr.forms import EditProfileForm
 import flaskr.data_source as bt 
@@ -226,3 +226,14 @@ def transfer(username):
 @app.route('/api/get_btc_price', methods=["GET"])  
 def get_current_price():
     return str(bt.get_cypto_price())
+
+@app.route('/create')
+def create():
+    print('test')
+    #collection = mongo["Market_order"]
+    
+    #print(mongo.list_collection_names())
+    #db_operations.insert_one(new_user)
+    #print(user['Name'],'Created successfully')
+    result = {'result' : 'Created successfully'}
+    return result
