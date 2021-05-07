@@ -1,12 +1,20 @@
 import requests 
+import json
 import pandas as pd 
+from flaskr.models import User, Transaction, Balance, BitPrice
+from datetime import datetime
 
 key = '3711ff28a46fd9f7cbc915ca70a67b30'
 #get cypto historical prices 
-def request_CyptoPrice_hour():
+def request_CyptoPrice_hour(num=-1):
     try:
         r = requests.get('https://financialmodelingprep.com/api/v3/historical-chart/1hour/BTCUSD?apikey=' + key)
-        return r.json()
+
+        data = r.json()
+        _data = {}
+        for line in data[:num]:
+            _data[line["date"]] = line['close']   
+        return _data
     except Exception as exc:
         print('error: ',exc)
 
@@ -17,33 +25,31 @@ def request_CyptoPrice_30min():
     except Exception as exc:
         print('error: ',exc)
 
-def request_CyptoPrice_day():
+def request_CyptoPrice_day(num=-1):
     try:
         r = requests.get('https://financialmodelingprep.com/api/v3/historical-price-full/BTCUSD?apikey=' + key)
-        return r.json()['historical']
+        data = r.json()['historical']
+        _data = {}
+        for line in data[:num]:
+            _data[line["date"]] = line['close']
+            
+        return _data
     except Exception as exc:
         print('error: ',exc)
 
 def get_cypto_price():
         try:
             r = requests.get('https://financialmodelingprep.com/api/v3/quote/BTCUSD?apikey=' + key)
-            return r.json()[0]['price']
+            
+            price = r.json()[0]['price']
+            return round(price,2)
         except Exception as exc:
             print('error: ',exc)
             
-import csv 
-import dateutil.parser
-from flaskr import db
-from flaskr.models import BitPrice
 
-def add_data():
-    with open('bitcoin_price.csv', 'r') as f:
-        next(f)
-        reader = csv.reader(f)
-        for row in reader:
-            new_entry = BitPrice(row[0], row[1], dateutil.parser.parse(row[2]))
-            db.session.add(new_entry)
-            db.session.commit()  
+
+        
+
 
 if __name__ == '__main__':
-    print(get_cypto_price())
+    print('nothing')

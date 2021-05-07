@@ -1,9 +1,218 @@
-{% extends "base_user.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <link rel="shortcut icon" href="#">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+    
+        var value_d= '{{ value_day|tojson|safe }}'
+        var value_m = '{{ value_month|tojson|safe }}'
+        var value_y = '{{ value_year|tojson|safe }}'
+        var value_all = '{{ value_all|tojson|safe }}'
+        var change_d = '{{ change_d|safe }}'
+        var change_m = '{{ change_m|safe }}'
+        var change_y = '{{ change_y|safe }}'
+        var change_all = '{{ change_all|safe }}'
+        var cash = '{{ balance.cash_balance}}'
+        var hedge = '{{ balance.hedge}}'
+        var bit = '{{ balance.bitcoin_value}}'
+        
+    </script>
+    <style>
+        body {
+            background-color: rgb(244,247,252);
 
-{% block content %}
+        }
 
-    <h5>Account Balance: {{ bit + cash }}</h5>
-    <h5>Cryptocurrency:  {{ bit }}</h5>
-    <h5>Cash: {{ cash }}</h5>
+        .card:hover{
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+        }
+        .change{
+          font-size: 75%;
+          color:#FF0000;
+          margin-top: -5;
+        }
+        .change.green{
+          color:green;
+        }
+        
+    </style>
+</head>
+<body>
+    <ul class="nav nav-pills" style="background-color: #e3f2fd;">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('position',username=current_user.username)}}">Portfolio</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">Activities</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('analysis',username=current_user.username)}}">Strategy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Notification</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li>
+    </ul>
+    <div class="container">
+    <div class="card-deck" style="margin-top: 10px; height: 500px;">
+        <div class="card">
+          <div class="card-body">
+              <h5>Portfolio Balance</h5>
+              <div class="row">
+                  <div class="col">
+                      <h3 class="card-title">$ {{ balance.cash_balance + balance.bitcoin_value}} <span class='change'>5%</span></h3>  
+                  </div>
+                  <div class="col">
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item">
+                          <a class="nav-link" id="bal_all" data-toggle="pill" role="tab" href="#ALL" aria-controls="ALL" aria-selected="false">ALL</a>
+                        </li>
+                      </ul>
+                  </div>
+              </div>
+            <div id="chart_balance"></div>
+            <script type="text/javascript" src="../../js/line_chart.js"></script>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Portfolio Assets</h5>
+            <div id="piechart"></div>
+            <script src="../../js/pie_chart.js"></script>  
+          </div>
+          <div class="card-footer">
+              <button type="button" class="btn btn-primary">Deposit</button>
+              <button type="button" class="btn btn-primary">Withdraw</button>
+          </div>
+        </div>
+    </div>
+    <div class="card" style="margin-top: 10px; height: 500px;">
+        <div class="card-body">
+            <h5>Bitcoin</h5>
+            <div class="row">
+            <div class="col">
+                <h2 class="card-title">$ {{ btc_now }} <span class="change" id="btc_change"> {{ change_d }}%</span></h2>
+            </div>
+            <div class="col">
+                <ul class="nav nav-pills justify-content-end" id="btc_tabs">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="btc_d" data-toggle="pill" role="tab" href="#1D" aria-controls="1D" aria-selected="true">1D</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="btc_m" data-toggle="pill" role="tab" href="#1M" aria-controls="1M" aria-selected="false">1M</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="btc_y" data-toggle="pill" role="tab" href="#1Y" aria-controls="1Y" aria-selected="false">1Y</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="btc_all" data-toggle="pill" role="tab" href="#ALL" aria-controls="ALL" aria-selected="false">ALL</a>
+                    </li>
+                  </ul>
+              </div>
+            </div>
+            <div id="chart_btc"></div>
+            <script src="../../js/bit_line_chart.js"></script>
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary">Buy</button>
+            <button type="button" class="btn btn-primary">Sell</button>
+        </div>
+    </div>
 
-{% endblock %}
+    <div class="card-deck" style="margin-top: 10px; height: 500px;">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Hedge Invest</h5>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Trader</th>
+                  <th>Since</th>
+                  <th>Your Investment</th>
+                  <th>Your Porfit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Jacob</th>
+                  <th>01-04-2021</th>
+                  <th>100</th>
+                  <th>30%</th>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Recent Activities</h5>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Time</th>
+                  <th scope="col">Order</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">01-04-2021</th>
+                  <th scope="col">Buy</th>
+                  <th scope="col">100</th>
+                  <th scope="col">Complete</th>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+      $(".nav .nav-link").on("click", function(){
+      $(".nav").find(".active").removeClass("active");
+      $(this).addClass("active");
+      });
+    </script>
+
+    <script>
+      var els = document.getElementsByClassName('change');
+      for (var i=0; i < els.length; i++){
+        var cell = els[i];
+        var a = parseFloat(cell.textContent)
+        console.log(a)
+        if (a < 0){
+          console.log('add red');
+          cell.classList.remove('green');
+        }else {
+          console.log('add green');
+          cell.textContent = '+' + cell.textContent; 
+          cell.classList.add('green');
+        }
+      }
+    </script>
+    
+    
+</body>
+</html>

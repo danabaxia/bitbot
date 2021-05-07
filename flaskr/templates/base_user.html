@@ -4,9 +4,8 @@
     {% if title %}{{ title }} - BitBot Wallet{% else %}Welcome to Bitbot{% endif %}
 {% endblock %}
 
-
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-success">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('index') }}">Bitbot Trading Platform</a>
             <ul class="nav navbar-nav">
@@ -22,8 +21,9 @@
             </ul>
         </div>
     </nav>
-
-    <h3>{{ current_user.username }}</h3>
+    <div class="container-fluid">
+    <h3>Hi, {{ current_user.username }}</h3>
+    </div>
     <ul class="nav nav-tabs" style="background-color: #e3f2fd;">
       <li class="nav-item">
         <a class="nav-link active" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Summary</a>

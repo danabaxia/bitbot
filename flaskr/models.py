@@ -1,5 +1,5 @@
 from datetime import datetime
-from flaskr import db
+from flaskr import db, db_nosql
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flaskr import login_manager
@@ -35,8 +35,11 @@ class User(UserMixin, db.Model):
 
 class Balance(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
     cash_balance = db.Column(db.Float, default=0)
     bitcoin_value = db.Column(db.Float, default=0)
+    bitcoin_amount = db.Column(db.Float, default=0)
+    hedge = db.Column(db.Float, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
     user = db.relationship('User',
@@ -45,7 +48,11 @@ class Balance(UserMixin, db.Model):
     def __repr__(self):
         return '<Balance: {}>'.format(self.id)
 
-
+"""
+order: market,limit,stop,recurring, hedge 
+action: buy, sell
+status: filling, complete
+"""
 class Transaction(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -84,22 +91,68 @@ class Strategy(UserMixin, db.Model):
     
 
 class BitPrice(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    exchange = db.Column(db.String())  
-    price = db.Column(db.String())     
+    id = db.Column(db.Integer, primary_key=True) 
+    symbol = db.Column(db.String(64), default='BTC')
+    price = db.Column(db.Float)     
     horah = db.Column(db.DateTime)
 
-    def __init__(self, exchange, price, horah):
-        self.exchange = exchange
+    def __init__(self, price, horah):
         self.price = price
         if horah is None:
             horah = datetime.utcnow()
         self.horah = horah
-
     def __repr__(self):
-        return '<Exchange {}>'.format(self.exchange)
+        return '<Symbol: {}>'.format(self.symbol)
+
+##############
+#Nosql db
+"""
+maket order
+{
+    "_id": 111,
+    "user": "admin",
+    "date":       ,
+    "type": 
+    "amount":      ,
+    "price":
+    "status":
+}
+
+limit order 
+{
+    "_id": ,
+    "user":,
+    "date":,
+    "type":,
+    "amount":,
+    "limit_price":,
+    "status":
+}
+
+stop order
+{
+    "_id":,
+    "user":,
+    "date":,
+    "type":,
+    "amount":,
+    "stop_price":,
+    "status":
+}
+"""
+class Order_market(db_nosql.Document):
+    id = db_nosql.IntField()
+    name = db_nosql.StringField()
+
+    def to_json(self):
+        return { "id": self.id, 
+                 "name": self.name}
+
+
 
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
