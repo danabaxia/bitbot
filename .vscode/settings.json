@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "ven\\Scripts\\python.exe",
+    "python.pythonPath": "/Users/jingbohan/Desktop/bitbot-7/ven/bin/python3",
     "python.autoComplete.extraPaths": [
         "ven/bin/flask"
     ],

@@ -75,6 +75,9 @@ https://stackoverflow.com/questions/31075893/im-getting-favicon-ico-error
 js date format:
 https://stackoverflow.com/questions/2013255/how-to-get-year-month-day-from-a-date-object
 
+loop html collection:
+https://www.geeksforgeeks.org/htmlcollection-for-loop/
+
 
 
 

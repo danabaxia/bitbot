@@ -162,10 +162,9 @@ def trade(username):
 @app.route('/user/<username>/analysis')
 @login_required
 def analysis(username):
-    print('test')
     user = User.query.filter_by(username=username).first_or_404()
-    print(type(user))
-    return render_template('analysis.html')
+    balance = user.balance[-1]
+    return render_template('analysis.html', balance=balance)
 
 @app.route('/user/<username>/history', methods=['GET','POST'])
 @login_required
@@ -224,3 +223,6 @@ def transfer(username):
         return redirect(url_for('summary',username=username))
     return render_template('transfer.html', form=form)
 
+@app.route('/api/get_btc_price', methods=["GET"])  
+def get_current_price():
+    return str(bt.get_cypto_price())
