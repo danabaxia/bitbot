@@ -18,12 +18,11 @@ app = Flask(__name__, static_url_path='')
 app.config.from_object(Config)
 #config mongoDB
 client = pymongo.MongoClient("mongodb+srv://bobo1314:Hjb1314$@cluster0.c7xci.mongodb.net/app?retryWrites=true&w=majority")
-mongo = client.app 
+mongo = client['app']
 
 db = SQLAlchemy(app)
 #db_nosql = MongoEngine()
 #db_nosql.init_app(app)
-mongo = PyMongo(app)
 
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)

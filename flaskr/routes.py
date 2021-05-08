@@ -16,6 +16,8 @@ from flaskr import socketio
 from flask_socketio import SocketIO, send 
 from flask import jsonify
 import json
+from pymongo import MongoClient
+import pprint
 
 
 
@@ -229,9 +231,6 @@ def get_current_price():
 
 @app.route('/create')
 def create():
-    print('test')
-    #collection = mongo["Market_order"]
-    
     #print(mongo.list_collection_names())
     #db_operations.insert_one(new_user)
     #print(user['Name'],'Created successfully')

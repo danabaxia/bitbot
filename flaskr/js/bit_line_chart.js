@@ -67,7 +67,7 @@ function drawCharts() {
             logScale: false
             },
             colors: ['blue'],
-            chartArea: { width: '85%', height:'75%'}
+            chartArea: { width: '85%', height:'95%'}
 
       };
 
