@@ -1,5 +1,5 @@
 from datetime import datetime
-from flaskr import db, db_nosql
+from flaskr import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flaskr import login_manager
@@ -117,7 +117,15 @@ maket order
     "price":
     "status":
 }
+"""
+"""class Order_market(db_nosql.Document):
+    id = db_nosql.IntField()
+    name = db_nosql.StringField()
 
+    def to_json(self):
+        return { "id": self.id, 
+                 "name": self.name}"""
+"""
 limit order 
 {
     "_id": ,
@@ -140,14 +148,6 @@ stop order
     "status":
 }
 """
-class Order_market(db_nosql.Document):
-    id = db_nosql.IntField()
-    name = db_nosql.StringField()
-
-    def to_json(self):
-        return { "id": self.id, 
-                 "name": self.name}
-
 
 
 

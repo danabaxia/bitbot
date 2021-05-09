@@ -102,8 +102,18 @@
                     <th scope="col">400</th>
                     <th scope="col">40%</th>
                     <th>
-                        <button class="btn btn-primary">Transform</button>
-                        <button class="btn btn-primary">Withdraw</button>
+                        <button class="btn btn-primary" id="transfer">Deposit</button>
+                        <script>
+                            document.getElementById('transfer').onclick = function(){
+                            location.href = "{{url_for('transfer',username=current_user.username)}}";
+                            };
+                        </script>
+                        <button class="btn btn-primary" id= "withdraw">Withdraw</button>
+                        <script>
+                          document.getElementById('withdraw').onclick = function(){
+                          location.href = "{{url_for('transfer',username=current_user.username)}}";
+                        };
+                        </script>
                     </th>
                   </tr>
                   <tr>
@@ -112,8 +122,18 @@
                     <th scope="col">200</th>
                     <th scope="col">20%</th>
                     <th>
-                        <button class="btn btn-primary">Buy</button>
-                        <button class="btn btn-primary">Sell</button>
+                        <button id="buy" class="btn btn-primary">Buy</button>
+                        <script>
+                          document.getElementById("buy").onclick = function(){
+                          location.href = "{{url_for('analysis',username=current_user.username)}}";
+                          };
+                        </script>
+                        <button id="sell" class="btn btn-primary">Sell</button>
+                        <script>
+                          document.getElementById("sell").onclick = function(){
+                          location.href = "{{url_for('analysis',username=current_user.username)}}";
+                          };
+                        </script>
                     </th>
                   </tr>
                   <tr>
