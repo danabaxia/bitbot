@@ -1,12 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<title>Bootstrap star rating example</title>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/css/star-rating.min.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/js/star-rating.min.js"></script>
 </head>
 <body>
-    test
+
+
+<div class="container">
+
+
+	<h2>Bootstrap star rating example</h2>
+
+
+    <br/>
+    <label for="input-1" class="control-label">Give a rating for Skill:</label>
+    <input id="input-1" name="input-1" class="rating rating-loading" data-min="0" data-max="5" data-step="0.1" value="2.5">
+
+
+    <br/>
+    <label for="input-2" class="control-label">Give a rating for Knowledge:</label>
+    <input id="input-2" name="input-2" class="rating rating-loading" data-min="0" data-max="5" data-step="0.1" value="4">
+
+
+    <br/>
+    <label for="input-3" class="control-label">Give a rating for PHP:</label>
+    <input id="input-3" name="input-3" class="rating" data-min="0" data-max="5" data-step="0.1" value="5">
+
+
+</div>
+
+
+<script>
+$("#input-id").rating();
+</script>
+
+<template>
+    <div>
+      <label for="rating-inline">Inline rating:</label>
+      <b-form-rating id="rating-inline" inline value="4"></b-form-rating>
+    </div>
+  </template>
 </body>
 </html>

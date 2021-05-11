@@ -229,12 +229,12 @@ def trade(username):
 def analysis(username):
     user = User.query.filter_by(username=username).first_or_404()
     balance = user.balance[-1]
-    return render_template('analysis.html', balance=balance)
+    users = User.query.all()
+    return render_template('analysis.html', balance=balance, users=users)
 
 @app.route('/user/<username>/history', methods=['GET','POST'])
 @login_required
 def history(username):
-    user = User.query.filter_by(username=username).first_or_404()
     #data = user.transactions 
     data = Order.objects(user=username).order_by('-date')
     return render_template('history.html',data=data)
