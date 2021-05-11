@@ -194,7 +194,12 @@
         if (a < 0){
           console.log('add red');
           cell.classList.remove('green');
-        }else {
+        }
+        else if (a == 0){
+          console.log('add green');
+          cell.classList.add('green');
+        }
+        else {
           console.log('add green');
           cell.textContent = '+' + cell.textContent; 
           cell.classList.add('green');

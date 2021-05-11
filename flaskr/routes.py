@@ -169,13 +169,17 @@ def summary(username):
     bit_amount = user.balance[-1].bitcoin_amount
     btc_now = bt.get_cypto_price()
     balance_dict = bt.get_balance_dict(username)
-    print(list(balance_dict.values())[-1])
+    print(balance_dict)
     change_d = round((btc_now - list(value_day.items())[-1][1])/list(value_day.items())[-1][1] * 100,2)
     change_m = round((btc_now - list(value_month.items())[-1][1])/list(value_month.items())[-1][1] * 100,2)
     change_y = round((btc_now - list(value_year.items())[-1][1])/list(value_year.items())[-1][1] * 100,2)
     change_all = round((btc_now - list(value_all.items())[-1][1])/list(value_all.items())[-1][1] * 100,2)
-    change_balance = round(change_m*bit/list(balance_dict.values())[-1],2)
+    if list(balance_dict.values())[-1] >0:
+        change_balance = round(change_m*bit/list(balance_dict.values())[-1],2)
+    else:
+        change_balance = 0.0
     print(change_balance)
+
     return render_template('summary.html',balance=balance, balance_dict=balance_dict,change_balance=change_balance,
                            value_all=value_all, value_day=value_day, value_month=value_month, 
                            value_week=value_week, value_year=value_year, btc_now=btc_now,

@@ -86,8 +86,17 @@ mongodb tutorial
 https://pythonbasics.org/flask-mongodb/
 http://docs.mongoengine.org/projects/flask-mongoengine/en/latest/
 
+production deployment
+https://vishnut.me/blog/ec2-flask-apache-setup.html
+https://stackoverflow.com/questions/35385431/how-to-deploy-python-flask-app-to-apache-httpd-running-on-amazon-linux-ec2-ins
+https://ketakirk.wordpress.com/deploy-an-app-on-aws/
+https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
+https://codefellows.github.io/sea-python-401d4/lectures/simple_wsgi_deployment.html
+https://alex.nisnevich.com/blog/2014/10/01/setting_up_flask_on_ec2.html
 
 
 
 
 
+
+ 

@@ -1,7 +1,10 @@
 {
-    "python.pythonPath": "./env/bin/python",
+    "python.pythonPath": "env\\Scripts\\python.exe",
     "python.autoComplete.extraPaths": [
         "./ven/bin/flask"
     ],
-    "files.autoSave": "afterDelay"
+    "files.autoSave": "afterDelay",
+    "python.analysis.extraPaths": [
+        "./ven/bin/flask"
+    ]
 }
