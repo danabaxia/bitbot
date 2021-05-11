@@ -16,8 +16,8 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     address = db.Column(db.String(128))
 
-    transactions = db.relationship('Transaction', backref=db.backref('user',lazy=True))
-    products = db.relationship('Product', backref=db.backref('user',lazy=True))
+    #transactions = db.relationship('Transaction', backref='user')
+    #products = db.relationship('Product', backref='user')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -63,10 +63,12 @@ class Transaction(UserMixin, db.Model):
     price = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
+    user = db.relationship('User',
+        backref=db.backref('transactions',lazy=True))
+
 
     def __repr__(self):
         return '<Transaction: {}>'.format(self.id)
-
 
 class Product(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -74,22 +76,23 @@ class Product(UserMixin, db.Model):
     subscription_type = db.Column(db.String(64), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
-    strategies = db.relationship('Strategy', backref=db.backref('product',lazy=True))
+    user = db.relationship('User',
+        backref=db.backref('products',lazy=True))
 
     def __repr__(self):
         return '<Product: {}>'.format(self.id)
-
 
 class Strategy(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     strategy_name = db.Column(db.String(64), index=True)
     product_strategy_algorithm = db.Column(db.String(64), index=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
-  
+    product = db.relationship('Product',
+        backref=db.backref('strategies',lazy=True))
+
     def __repr__(self):
         return '<Strategy: {}>'.format(self.strategy_name)
     
-
 class BitPrice(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
     symbol = db.Column(db.String(64), default='BTC')
@@ -121,7 +124,6 @@ maket order
 """class Order_market(db_nosql.Document):
     id = db_nosql.IntField()
     name = db_nosql.StringField()
-
     def to_json(self):
         return { "id": self.id, 
                  "name": self.name}"""
@@ -136,7 +138,6 @@ limit order
     "limit_price":,
     "status":
 }
-
 stop order
 {
     "_id":,
@@ -150,9 +151,6 @@ stop order
 """
 
 
-
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-
