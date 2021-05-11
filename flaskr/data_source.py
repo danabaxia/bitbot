@@ -56,7 +56,7 @@ def get_balance_dict(self, user_name):
     balance_dict = {}
     for balance_idx in balance_list:
         balance = Balance(balance_idx)
-        balance_dict[balance.date] = balance.cash_balance + balance.bitcoin_value + balance.bitcoin_amount
+        balance_dict[balance.date] = balance.cash_balance + balance.bitcoin_value * balance.bitcoin_amount
 
     return balance_dict        
 
