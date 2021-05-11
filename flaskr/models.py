@@ -124,7 +124,6 @@ maket order
 """class Order_market(db_nosql.Document):
     id = db_nosql.IntField()
     name = db_nosql.StringField()
-
     def to_json(self):
         return { "id": self.id, 
                  "name": self.name}"""
@@ -139,7 +138,6 @@ limit order
     "limit_price":,
     "status":
 }
-
 stop order
 {
     "_id":,
@@ -156,5 +154,3 @@ stop order
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-

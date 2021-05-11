@@ -45,10 +45,20 @@ def get_cypto_price():
             return round(price,2)
         except Exception as exc:
             print('error: ',exc)
-            
 
 
-        
+def get_balance_dict(self, user_name):
+    user = User.query.filter_by(username=user_name.data).first()
+    if user is not None:
+        raise ValidationError('Please use a different username')
+
+    balance_list = user.balance
+    balance_dict = {}
+    for balance_idx in balance_list:
+        balance = Balance(balance_idx)
+        balance_dict[balance.date] = balance.cash_balance + balance.bitcoin_value * balance.bitcoin_amount
+
+    return balance_dict        
 
 
 if __name__ == '__main__':
