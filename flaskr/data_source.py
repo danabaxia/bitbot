@@ -47,7 +47,15 @@ def get_cypto_price():
             print('error: ',exc)
             
 
-
+def get_balance_dict(user_name):
+    user = User.query.filter_by(username=user_name).first()
+    balance_list = user.balance
+    balance_dict = {}
+    for balance_idx in balance_list:
+        #balance = Balance(balance_idx)
+        #balance_dict[balance.date] = balance.cash_balance + balance.bitcoin_value + balance.bitcoin_amount
+        balance_dict[balance_idx.date.strftime("%Y-%m-%d")] = balance_idx.cash_balance + balance_idx.bitcoin_value
+    return balance_dict
         
 
 

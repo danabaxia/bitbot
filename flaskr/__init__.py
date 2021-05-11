@@ -11,18 +11,24 @@ from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 from flask_pymongo import PyMongo
 import pymongo
 from pymongo import MongoClient
+import threading, time, requests
+
 
 
 
 app = Flask(__name__, static_url_path='')
 app.config.from_object(Config)
 #config mongoDB
-client = pymongo.MongoClient("mongodb+srv://bobo1314:Hjb1314$@cluster0.c7xci.mongodb.net/app?retryWrites=true&w=majority")
-mongo = client['app']
+#client = pymongo.MongoClient("mongodb+srv://test:test@cluster0.c7xci.mongodb.net/app?retryWrites=true&w=majority")
+#mongo = client['app']
+DB_URI = "mongodb+srv://test:test@cluster0.c7xci.mongodb.net/app?retryWrites=true&w=majority"
+app.config["MONGODB_HOST"] = DB_URI
+
+mongo = MongoEngine(app)
 
 db = SQLAlchemy(app)
-#db_nosql = MongoEngine()
-#db_nosql.init_app(app)
+mongo = MongoEngine()
+mongo.init_app(app)
 
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)

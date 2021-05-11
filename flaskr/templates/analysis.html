@@ -29,16 +29,15 @@
           font-style: italic;
         }
         button{
-            width: 100px;
+          width: 100px;
         }
         h6{
-            font-style: italic;
-            color:gray
+          font-style: italic;
+          color:gray
         }
         h3{
-            font-style:initial
-        }
-        
+          font-style:initial
+        }       
     </style>
 </head>
 <body>
@@ -47,16 +46,10 @@
             <a class="nav-link" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="#" href="{{url_for('position',username=current_user.username)}}">Portfolio</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" href="{{url_for('history',username=current_user.username)}}">Activities</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" href="{{url_for('analysis',username=current_user.username)}}">Strategy</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
@@ -102,11 +95,11 @@
                             xhttp.onreadystatechange = function() {
                               if (this.readyState == 4 && this.status == 200){
                                 elems = document.getElementsByClassName("market");
-                                console.log(elems);
-                                content = this.responseText;
-                                console.log(content);
+                                //console.log(elems);
+                                var content = this.responseText;
+                                //console.log(content);
                                 for (elem of elems){
-                                  console.log(elem);
+                                  //console.log(elem);
                                   elem.textContent = content;
                                 }
                               }
@@ -114,6 +107,7 @@
                             xhttp.open("GET", "/api/get_btc_price", true);
                             xhttp.send();
                             console.log('send request');
+                            console.log('{{ balance.cash_balance }}')
                           }
                         </script>
                         </td>
@@ -129,11 +123,11 @@
                     <tbody>
                     <tr>
                         <td>
-                            <h5>Recurring Investment</h5>
-                            <h6>Invest on a recurring schedule</h6>
+                            <h5>Trailing Stop Order</h5>
+                            <h6>Trigger a market order if above its lowest price by:</h6>
                         </td>
                         <td>
-                        <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#buy_recurring">Buy now</button>
+                        <button type="button" class="btn btn-link float-right" data-bs-toggle="modal" data-bs-target="#buy_trailing_stop">Buy now</button>
                         </td>
                     </tr>
                     <tr>
@@ -280,6 +274,7 @@
   
   <!-- Modal -->
   <!-- Modal Buy-->
+  <form action="/market_buy" method="post">
   <div class="modal fade" id="buy_in_dollar" tabindex="-1" aria-labelledby="buy_in_dollar" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -290,18 +285,19 @@
         <div class="modal-body">
           <h5>Market Price($): <span class="market">6000</span></h5>
           <label for="amount1" class="form-label">Amount($)</label>
-          <input type="text" id="amount1" class="form-control">
-          <h6>$ 1000 availabe to buy bitcoin</h6>
+          <input type="test" id="amount1" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.cash_balance }}</span> availabe to buy bitcoin</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
-
+</form>
   <!--Buy in amounts-->
+  <form action="/market_buy_amount" method="post">
   <div class="modal fade" id="buy_in_amount" tabindex="-1" aria-labelledby="buy_in_amount" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -312,55 +308,48 @@
         <div class="modal-body">
           <h5>Market Price($): <span class="market">6000</span></h5>
           <label for="amount2" class="form-label">Amount(#)</label>
-          <input type="text" id="amount2" class="form-control">
-          <h6># 0.001 availabe to buy bitcoin</h6>
+          <input type="text" id="amount2" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.cash_balance }}</span> availabe to buy bitcoin</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
-  <!--Buy recurring-->
-  <div class="modal fade" id="buy_recurring" tabindex="-1" aria-labelledby="buy_recurring" aria-hidden="true">
+  </form>
+  <!--Buy trailing stop-->
+  <form action="/trail_buy" method="post">
+  <div class="modal fade" id="buy_trailing_stop" tabindex="-1" aria-labelledby="sell_trailing_stop" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Setting investment schedule</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <label for="amount3" class="form-label">Amount($)</label>
-            <input type="text" id="amount3" class="form-control">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="daily">
-                <label class="form-check-label" for="daily">
-                  Daily
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="weekly">
-                <label class="form-check-label" for="weekly">
-                  Weekly
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="monthly" checked>
-                <label class="form-check-label" for="monthly">
-                  Monthly
-                </label>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Buy Trailing Stop Order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label for="limit_price3" class="form-label">Buy Trail Percentage(%)</label>
+            <h6>Trigger a market sell order if price rises above its lowest price by:</h6>
+            <input type="text" id="limit_price3" name="price" class="form-control">
+            <h6>Initial Stop Price($): 40000</h6>
+            <h6>Current Market Price($): <span class="market">6000</span></h6>
+            <label for="amount8" class="form-label">Amount($)</label>
+            <h6>Amount you are willing to sell</h6>
+            <input type="text" id="amount8" name="amount" class="form-control">
+            <h6>$ <span>{{ balance.cash_balance }}</span> bitcoin availabe to sell</h6>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
         </div>
       </div>
-    </div>
   </div>
+  </form>
 
   <!--Buy Limit order -->
+  <form action="/limit_buy" method="post">
   <div class="modal fade" id="buy_limit_order" tabindex="-1" aria-labelledby="buy_limit_order" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -371,48 +360,52 @@
         <div class="modal-body">
           <label for="limit_price1" class="form-label">Set Limit Price($)</label>
           <h6>Maximum price you are willing to buy at</h6>
-          <input type="text" id="limit_price1" class="form-control">
+          <input type="text" id="limit_price1" name="price" class="form-control">
           <h6>Current Market Price($):<span class="market">6000</span></h6>
           <label for="amount4" class="form-label">Amount($)</label>
           <h6>Amount you are willing to buy</h6>
-          <input type="text" id="amount4" class="form-control">
-          <h6>$ 1000 availabe to buy bitcoin</h6>
+          <input type="text" id="amount4" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.cash_balance }}</span> availabe to buy bitcoin</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
+  </form>
 
   <!--Buy stop order-->
+  <form action="/stop_buy" method="post">
   <div class="modal fade" id="buy_stop_order" tabindex="-1" aria-labelledby="buy_stop_order" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Buy Limit Order</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Buy Stop Order</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <label for="limit_price2" class="form-label">Set Stop Price($)</label>
           <h6>Trigger a market buy order if prices rises up to:</h6>
-          <input type="text" id="limit_price2" class="form-control">
+          <input type="text" id="limit_price2" name="price" class="form-control">
           <h6>Current Market Price($): <span class="market">6000</span></h6>
           <label for="amount5" class="form-label">Amount($)</label>
           <h6>Amount you are willing to buy</h6>
-          <input type="text" id="amount5" class="form-control">
-          <h6>$ 1000 availabe to buy bitcoin</h6>
+          <input type="text" id="amount5" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.cash_balance }}</span> availabe to buy bitcoin</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
+  </form>
 
   <!-- Modal Sell-->
+  <form action="/market_sell" method="post">
   <div class="modal fade" id="sell_in_dollar" tabindex="-1" aria-labelledby="sell_in_dollar" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -423,19 +416,21 @@
         <div class="modal-body">
           <h6>Market Price($): <span class="market">6000</span></h6>
           <label for="amount6" class="form-label">Amount($)</label>
-          <input type="text" id="amount6" class="form-control">
-          <h6>$ 1000 availabe to sell</h6>
+          <input type="text" id="amount6" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.bitcoin_value }}</span> availabe to sell</h6>
           
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
+  </form>
 
   <!--Sell in amounts-->
+  <form action="/market_sell_amount" method="post">
   <div class="modal fade" id="sell_in_amount" tabindex="-1" aria-labelledby="sell_in_amount" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -446,17 +441,19 @@
         <div class="modal-body">
           <h6>Market Price($): <span class="market">6000</span></h6>
           <label for="amount7" class="form-label">Amount(#)</label>
-          <input type="text" id="amount7" class="form-control">
-          <h6># 0.001 bitcoin availabe to sell</h6>
+          <input type="text" id="amount7" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.cash_balance }}</span> bitcoin availabe to sell</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
+  </form>
   <!--Sell trailing stop order-->
+  <form action="/trail_sell" method="post">
   <div class="modal fade" id="sell_trailing_stop" tabindex="-1" aria-labelledby="sell_trailing_stop" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -467,23 +464,25 @@
           <div class="modal-body">
             <label for="limit_price3" class="form-label">Set Trail Percentage(%)</label>
             <h6>Trigger a market sell order if price falls below its highest price by:</h6>
-            <input type="text" id="limit_price3" class="form-control">
+            <input type="text" id="limit_price3" name="price" class="form-control">
             <h6>Initial Stop Price($): 40000</h6>
             <h6>Current Market Price($): <span class="market">6000</span></h6>
             <label for="amount8" class="form-label">Amount($)</label>
             <h6>Amount you are willing to sell</h6>
-            <input type="text" id="amount8" class="form-control">
-            <h6>$ 1000 bitcoin availabe to sell</h6>
+            <input type="text" id="amount8" name="amount" class="form-control">
+            <h6>$ <span>{{ balance.cash_balance }}</span> bitcoin availabe to sell</h6>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
           </div>
         </div>
       </div>
   </div>
+  </form>
 
   <!--Sell Limit order -->
+  <form action="/limit_sell" method="post">
   <div class="modal fade" id="sell_limit_order" tabindex="-1" aria-labelledby="sell_limit_order" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -494,46 +493,49 @@
         <div class="modal-body">
           <label for="limit_price4" class="form-label">Set Limit Price($)</label>
           <h6>Minimum price you are willing to sell at</h6>
-          <input type="text" id="limit_price4" class="form-control">
+          <input type="text" id="limit_price4" name="price" class="form-control">
           <h6>Current Market Price($): <span class="market">6000</span></h6>
           <label for="amount9" class="form-label">Amount($)</label>
           <h6>Amount you are willing to sell</h6>
-          <input type="text" id="amount9" class="form-control">
-          <h6>$ 1000 bitcoin availabe to sell</h6>
+          <input type="text" id="amount9" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.cash_balance }}</span> bitcoin availabe to sell</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
+  </form>
 
   <!--Sell stop order-->
+  <form action="/stop_sell" method="post">
   <div class="modal fade" id="sell_stop_order" tabindex="-1" aria-labelledby="sell_stop_order" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Sell Limit Order</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Sell Stop Order</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <label for="limit_price5" class="form-label">Set Stop Price($)</label>
           <h6>Trigger a market sell order if price falls to:</h6>
-          <input type="text" id="limit_price5" class="form-control">
+          <input type="text" id="limit_price5" name="price" class="form-control">
           <h6>Current Market Price($): <span class="market">6000</span></h6>
           <label for="amount" class="form-label">Amount($)</label>
           <h6>Amount you are willing to sell</h6>
-          <input type="text" id="amount" class="form-control">
-          <h6>$ 1000 bitcoin availabe to sell</h6>
+          <input type="text" id="amount" name="amount" class="form-control">
+          <h6>$ <span>{{ balance.cash_balance }}</span> bitcoin availabe to sell</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
   </div>
+  </form>
   
   <!--follow modal-->
   <div class="modal fade" id="follow" aria-labelledby="follow" aria-hidden="true">

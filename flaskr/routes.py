@@ -2,9 +2,9 @@ from flask import render_template, flash, redirect, send_from_directory
 from flask.helpers import url_for
 from flask_login.utils import login_required
 from flaskr import app
-from flaskr.forms import LoginForm, RegistrationForm, TransferForm, TransactionForm
+from flaskr.forms import *
 from flask_login import current_user, login_user
-from flaskr.models import User, Transaction, Balance
+from flaskr.models import User, Transaction, Balance, Test, Order
 from flask_login import logout_user
 from flask import request
 from werkzeug.urls import url_parse
@@ -17,7 +17,63 @@ from flask_socketio import SocketIO, send
 from flask import jsonify
 import json
 from pymongo import MongoClient
-import pprint
+import threading, time 
+
+"""@app.before_first_request
+def activate_job():
+    def run_job():
+        while True:
+            print("Run recurring task")
+            for order in Order.objects(status='filing'):
+                print(order.method)
+                if order.method == 'market':
+                    if order.action == 'buy':
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance - order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value + order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('market order buy complete')
+                    elif order.action == 'sell':
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance + order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value - order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('market order sell complete')
+                elif order.method == 'limit':
+                    if order.action == 'buy' and order.price >bt.get_cypto_price():
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance - order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value + order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('limit order buy complete')
+                    elif order.action == 'sell' and order.price <bt.get_cypto_price():
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance + order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value - order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('limit order sell complete')
+
+
+
+            time.sleep(3)
+    thread = threading.Thread(target=run_job)
+    thread.start()"""
 
 
 
@@ -112,11 +168,15 @@ def summary(username):
     bit = user.balance[-1].bitcoin_value
     bit_amount = user.balance[-1].bitcoin_amount
     btc_now = bt.get_cypto_price()
+    balance_dict = bt.get_balance_dict(username)
+    print(list(balance_dict.values())[-1])
     change_d = round((btc_now - list(value_day.items())[-1][1])/list(value_day.items())[-1][1] * 100,2)
     change_m = round((btc_now - list(value_month.items())[-1][1])/list(value_month.items())[-1][1] * 100,2)
     change_y = round((btc_now - list(value_year.items())[-1][1])/list(value_year.items())[-1][1] * 100,2)
     change_all = round((btc_now - list(value_all.items())[-1][1])/list(value_all.items())[-1][1] * 100,2)
-    return render_template('summary.html',balance=balance, 
+    change_balance = round(change_m*bit/list(balance_dict.values())[-1],2)
+    print(change_balance)
+    return render_template('summary.html',balance=balance, balance_dict=balance_dict,change_balance=change_balance,
                            value_all=value_all, value_day=value_day, value_month=value_month, 
                            value_week=value_week, value_year=value_year, btc_now=btc_now,
                            change_d=change_d, change_m=change_m, change_y= change_y, change_all=change_all)
@@ -146,7 +206,6 @@ def trade(username):
     if request.method == "POST":
         user = User.query.filter_by(username=username).first()
         cash = user.balance[-1].cash_balance - form.amount.data
-        print('cash', cash)
         bitcoin_value = user.balance[-1].bitcoin_value + form.amount.data
         bitcoin_amount = user.balance[-1].bitcoin_amount + form.amount.data/bt.get_cypto_price()
         Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
@@ -172,13 +231,24 @@ def analysis(username):
 @login_required
 def history(username):
     user = User.query.filter_by(username=username).first_or_404()
-    data = user.transactions 
+    #data = user.transactions 
+    data = Order.objects(user=username).order_by('-date')
     return render_template('history.html',data=data)
 
-@app.route('/remove_order')
-def background_process_test():
+@app.route('/remove_order&ID=<string:order_id>', methods=['POST', 'GET'])
+def remove_order(order_id):
     print ("Hello")
-    return ('nothing')
+    print(order_id)
+    Order(id=order_id).delete()
+    return ('OK')
+
+@app.route('/update_order&ID=<string:order_id>&price=<string:price_update>', methods=['POST', 'GET'])
+def update_order(order_id, price_update):
+    print(order_id)
+    price = float(price_update)
+    order = Order(id=order_id).update(price=price)
+    print ("update complete")
+    return ('OK')
 
 #record user last visit 
 @app.before_request
@@ -229,10 +299,144 @@ def transfer(username):
 def get_current_price():
     return str(bt.get_cypto_price())
 
-@app.route('/create')
-def create():
-    #print(mongo.list_collection_names())
-    #db_operations.insert_one(new_user)
-    #print(user['Name'],'Created successfully')
-    result = {'result' : 'Created successfully'}
-    return result
+@app.route('/market_buy', methods=["POST","GET"])
+def market_buy():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'buy'
+        form.method = 'market'
+        form.amount = float(result['amount'])
+        form.price = bt.get_cypto_price()
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/market_buy_amount', methods=["POST","GET"])
+def market_buy_amount():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'buy'
+        form.method = 'market'
+        form.price = bt.get_cypto_price()
+        form.amount = float(result['amount'])*form.price
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/market_sell', methods=["POST","GET"])
+def market_sell():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'sell'
+        form.method = 'market'
+        form.amount = float(result['amount'])
+        form.price = bt.get_cypto_price()
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+    return 'complete'
+
+@app.route('/market_sell_amount', methods=["POST","GET"])
+def market_sell_amount():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'sell'
+        form.method = 'market'
+        form.price = bt.get_cypto_price()
+        form.amount = float(result['amount'])*form.price
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/limit_buy', methods=["POST","GET"])
+def limit_buy():
+    form = OrderForm()
+    print('hi')
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'buy'
+        form.method = 'limit'
+        form.amount = float(result['amount'])
+        form.price = float(result['price'])
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        flash('Your changes have been saved.')
+        print('sent order')
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/limit_sell', methods=["POST","GET"])
+def limit_sell():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'sell'
+        form.method = 'limit'
+        form.amount = float(result['amount'])
+        form.price = float(result['price'])
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        flash('Your changes have been saved.')
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/stop_buy', methods=["POST","GET"])
+def stop_buy():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'buy'
+        form.method = 'stop'
+        form.amount = float(result['amount'])
+        form.price = float(result['price'])
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        flash('Your changes have been saved.')
+        print('sent order')
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/stop_sell', methods=["POST","GET"])
+def stop_sell():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'sell'
+        form.method = 'stop'
+        form.amount = float(result['amount'])
+        form.price = float(result['price'])
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        flash('Your changes have been saved.')
+        print('sent order')
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/trail_buy', methods=["POST","GET"])
+def trail_buy():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'buy'
+        form.method = 'trail'
+        form.amount = float(result['amount'])
+        form.price = round((float(result['price'])/100 + 1)* bt.get_cypto_price(),2)
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        flash('Your changes have been saved.')
+        print('sent order')
+    return redirect(url_for('analysis',username=form.user))
+
+@app.route('/trail_sell', methods=["POST","GET"])
+def trail_sell():
+    form = OrderForm()
+    if request.method == 'POST':
+        form.user = current_user.username
+        result = request.form
+        form.action = 'sell'
+        form.method = 'trail'
+        form.amount = float(result['amount'])
+        form.price = round((1 - float(result['price'])/100)* bt.get_cypto_price(),2)
+        Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        flash('Your changes have been saved.')
+        print('sent order')
+    return redirect(url_for('analysis',username=form.user))

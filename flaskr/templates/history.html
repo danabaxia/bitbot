@@ -27,16 +27,10 @@
         <a class="nav-link" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Home</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{url_for('position',username=current_user.username)}}">Portfolio</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link active" href="{{url_for('history',username=current_user.username)}}">Activities</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('analysis',username=current_user.username)}}">Strategy</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{url_for('trade',username=current_user.username)}}">Trade</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('transfer',username=current_user.username)}}">Transfer</a>
@@ -64,34 +58,51 @@
         </thead>
         <tbody>
           {% for row in data %} 
-            {% if row.status == "Filing" %}   
-            <tr>
+            {% if row.status == "filing" %}   
+            <tr id="row">
+                <script>a = 0</script>
                 <td>{{row.date}}</td>
                 <td>{{row.action}}</td>
-                <td>{{row.order}}</td>
+                <td>{{row.method}}</td>
                 <td>{{row.status}}</td>
                 <td>{{row.amount}}</td>
-                <td>{{row.price}}</td>
+                <td><div contenteditable><span id="edit">{{row.price}}</span></div></td>
                 <td>
-                <form>
-                  <a href="#" id=test><button class='btn btn-primary'>Remove</button></a>
-                  <a href="#" id=test><button class='btn btn-primary'>Edit</button></a>
-                </form>
+                  <input type="button" value="Remove" class="remove btn btn-primary" name="remove" id="{{ row.id }}">
+                  <input type="button" value=" Update " class="update btn btn-primary" name="update" id="update" >
                 </td>
                 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
                 <script type=text/javascript>
-                        $(function() {
-                          $('a#test').on('click', function(e) {
-                            e.preventDefault()
-                            $.getJSON('/remove_order',
-                               function(data) {
-            
-                            });
-                            return false;
-                          });
+                        $("#{{ row.id }}").click(function(){
+                          rowID = $(this).attr('id');
+                          console.log(typeof rowID);
+                          $.ajax({
+                            url: "/remove_order&ID=" + rowID,
+                            cache: false,
+                            success: function(data){
+                              //$(this).closest('tr').remove();
+                              $("#row").remove();
+                            }
+                          })
                        });
                 </script>
-
+                <!--How to name element ID with variables and string-->
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                <script type=text/javascript>
+                    $(".update").click(function(){
+                    rowID = $("#{{ row.id }}").attr('id');
+                    var price_update = document.getElementById("edit").textContent;
+                    console.log(price_update);
+                    $.ajax({
+                      url: "/update_order&ID=" + rowID + "&price=" + price_update,
+                      cache: false,
+                      success: function(data){
+                        //$(this).closest('tr').remove();
+                        console.log('update order already');
+                      }
+                    })
+                 });
+                </script>
             </tr>
             {% endif %}
         {% endfor %}
@@ -111,11 +122,11 @@
         </thead>
         <tbody>
           {% for row in data %} 
-            {% if row.status == "Complete" %}   
+            {% if row.status == "complete" %}   
             <tr>
                 <td>{{row.date}}</td>
                 <td>{{row.action}}</td>
-                <td>{{row.order}}</td>
+                <td>{{row.method}}</td>
                 <td>{{row.status}}</td>
                 <td>{{row.amount}}</td>
                 <td>{{row.price}}</td>

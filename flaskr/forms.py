@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
-from flaskr.models import User
+from flaskr.models import *
+from flask_mongoengine.wtf import model_form
 # from flask.ext.mysql import MySQL
 # from flask import Flask, render_template, request
 
@@ -45,3 +46,5 @@ class TransactionForm(FlaskForm):
     order = StringField('Order')
     price = FloatField('Price', validators=[DataRequired()])
     submit = SubmitField('Sumbit')
+
+OrderForm = model_form(Order)

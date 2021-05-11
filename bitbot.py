@@ -1,8 +1,10 @@
-from flaskr import app, db
-from flaskr.models import User, Transaction, BitPrice, Balance, Product, Strategy
+from flaskr import app, db, mongo
+from flaskr.models import User, Transaction, Strategy, Balance, BitPrice, Product, Test, Order
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'User': User, 'Transaction': Transaction, 'Strategy': Strategy,
-            'Balance': Balance, 'BitPrice': BitPrice, 'Product': Product
+    return {'db': db, 'mongo': mongo, 'User': User, 'Transaction': Transaction, 'Strategy': Strategy,
+            'Balance': Balance, 'BitPrice': BitPrice, 'Product': Product, 'Test': Test,
+            'Order':Order
             }
+ 

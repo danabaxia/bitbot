@@ -79,6 +79,14 @@ loop html collection:
 https://www.geeksforgeeks.org/htmlcollection-for-loop/
 
 
+URI mongodb set up for mongoengine 
+https://stackoverflow.com/questions/57931328/connect-to-mongodb-atlas-cluster-with-mongoengine
+
+mongodb tutorial
+https://pythonbasics.org/flask-mongodb/
+http://docs.mongoengine.org/projects/flask-mongoengine/en/latest/
+
+
 
 
 

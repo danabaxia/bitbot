@@ -1,5 +1,5 @@
 from datetime import datetime
-from flaskr import db
+from flaskr import db, mongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flaskr import login_manager
@@ -151,7 +151,32 @@ stop order
     "status":
 }
 """
+class Test(mongo.Document):
+    name = mongo.StringField()
+    email = mongo.StringField()
 
+class Order(mongo.Document):
+    user = mongo.StringField(required=True)
+    date = mongo.DateTimeField(default=datetime.now, required=True)
+    action = mongo.StringField(required=True)
+    method = mongo.StringField(required=True)
+    status = mongo.StringField(default='filing')
+    #detail = mongo.GenericReferenceField(required=True)
+    amount = mongo.FloatField()
+    price = mongo.FloatField()
+    trigger = mongo.FloatField()
+
+class Market(mongo.Document):
+    price_market = mongo.FloatField()
+
+class Limit(mongo.Document):
+    price_limit = mongo.FloatField()
+
+class Stop(mongo.Document):
+    price_stop = mongo.FloatField()
+
+class StopTrail(mongo.Document):
+    price_trail = mongo.FloatField()
 
 @login_manager.user_loader
 def load_user(id):

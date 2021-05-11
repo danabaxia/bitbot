@@ -1,12 +1,12 @@
 google.charts.load('current', {packages: ['corechart', 'line'], callback:'drawLogScales'});
 google.charts.setOnLoadCallback(drawLogScales);
 
-var obj = JSON.parse(value_d)
-
+var obj = JSON.parse(balance_dict)
+console.log(obj)
 var result = [];
 for(var i in obj)
     result.push([i, obj [i]]);
-
+console.log(result)
 
 function drawLogScales() {
       var data = new google.visualization.DataTable();
