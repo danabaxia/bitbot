@@ -18,6 +18,8 @@ from flask import jsonify
 import json
 from pymongo import MongoClient
 import threading, time 
+##
+import flaskr.data as dt
 
 """@app.before_first_request
 def activate_job():
@@ -155,12 +157,19 @@ def user(username):
 @login_required
 def summary(username):
     #sample data of btc
-    value_day = bt.request_CyptoPrice_hour(24)
-    value_week = bt.request_CyptoPrice_day(7)
-    value_month = bt.request_CyptoPrice_day(30)
-    value_year = bt.request_CyptoPrice_day(365)
-    value_all = bt.request_CyptoPrice_day()
-    hourly_value = bt.request_CyptoPrice_hour()
+    value_day = dt.value_day
+    value_week = dt.value_week
+    value_month = dt.value_month
+    value_year = dt.data_as_dict_year
+    value_all = dt.value_all
+    hourly_value = dt.hourly_value
+
+    # value_day = bt.request_CyptoPrice_hour(24)
+    # value_week = bt.request_CyptoPrice_day(7)
+    # value_month = bt.request_CyptoPrice_day(30)
+    # value_year = bt.request_CyptoPrice_day(365)
+    # value_all = bt.request_CyptoPrice_day()
+    # hourly_value = bt.request_CyptoPrice_hour()
     #sample data of bit_value
     user = User.query.filter_by(username=username).first_or_404()
     balance= user.balance[-1]

@@ -1,5 +1,6 @@
 google.charts.load('current', {packages: ['corechart', 'line'],callback: 'drawCharts'});
 
+
 function json2array(json_data){
   var obj = JSON.parse(json_data);
   var result = [];
