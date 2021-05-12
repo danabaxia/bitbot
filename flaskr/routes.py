@@ -115,7 +115,7 @@ def activate_job():
 
             time.sleep(1)
     thread = threading.Thread(target=run_job)
-    #thread.start()
+    thread.start()
 
 
 
