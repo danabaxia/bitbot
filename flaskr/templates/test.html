@@ -1,48 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Bootstrap star rating example</title>
-	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/css/star-rating.min.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/js/star-rating.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="#">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!--Bootstrap 5.0-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <!--get icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js">
+    </script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
+    </script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js">
+    </script>
+    <style>
+        body {
+            background-color: rgb(244,247,252);
+
+        }
+
+        .card:hover{
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+        }
+        span{
+          font-size: 75%;
+          color:gray;
+          margin-top: -5;
+          font-style: italic;
+        }
+        button{
+          width: 100px;
+        }
+        h6{
+          font-style: italic;
+          color:gray
+        }
+        h3{
+          font-style:initial
+        }    
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting:before,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_asc:before,
+        table.dataTable thead .sorting_asc_disabled:after,
+        table.dataTable thead .sorting_asc_disabled:before,
+        table.dataTable thead .sorting_desc:after,
+        table.dataTable thead .sorting_desc:before,
+        table.dataTable thead .sorting_desc_disabled:after,
+        table.dataTable thead .sorting_desc_disabled:before {
+          bottom: .5em;
+        }   
+    </style>
 </head>
 <body>
-
-
-<div class="container">
-
-
-	<h2>Bootstrap star rating example</h2>
-
-
-    <br/>
-    <label for="input-1" class="control-label">Give a rating for Skill:</label>
-    <input id="input-1" name="input-1" class="rating rating-loading" data-min="0" data-max="5" data-step="0.1" value="2.5">
-
-
-    <br/>
-    <label for="input-2" class="control-label">Give a rating for Knowledge:</label>
-    <input id="input-2" name="input-2" class="rating rating-loading" data-min="0" data-max="5" data-step="0.1" value="4">
-
-
-    <br/>
-    <label for="input-3" class="control-label">Give a rating for PHP:</label>
-    <input id="input-3" name="input-3" class="rating" data-min="0" data-max="5" data-step="0.1" value="5">
-
-
-</div>
-
-
-<script>
-$("#input-id").rating();
-</script>
-
-<template>
-    <div>
-      <label for="rating-inline">Inline rating:</label>
-      <b-form-rating id="rating-inline" inline value="4"></b-form-rating>
-    </div>
-  </template>
+      <table class="table table-striped table-bordered" id="sortTable">
+        <thead>
+          <tr>
+            <th class="th-sm">Trader
+            </th>
+            <th class="th-sm">Last visit
+            </th>
+            <th class="th-sm">Bit Assets($)
+            </th>
+            <th class="th-sm">#Followers
+            </th>
+            <th class="th-sm">Return(Y)
+            </th>
+            <th class="th-sm">Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>{{ user.username }}</td>
+              <td>{{ user.last_seen }}</td>
+              <td>{{ user.balance[-1].bitcoin_value }}</td>
+              <td>100</td>
+              <td>50%</td>
+              <td>
+                <input type="button" value="Follow" class="btn btn-link float-middle follow_button" data-bs-toggle="modal" data-bs-target="#follow" id="{{user.username}}">
+                <script type=text/javascript>
+                  $("#{{user.username}}").click(function(){
+                    var user = $(this).attr('id');
+                    console.log(user);
+                    elem = document.getElementById("trader");
+                    elem.textContent = user;
+                  })
+                </script>
+              </td>
+            </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Trader
+            </th>
+            <th>Last visit
+            </th>
+            <th>Bit Assets($)
+            </th>
+            <th>#Followers
+            </th>
+            <th>Return(Y)
+            </th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+      <script>
+        $('#sortTable').DataTable();
+      </script>
 </body>
-</html>

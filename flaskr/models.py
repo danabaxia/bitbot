@@ -166,6 +166,12 @@ class Order(mongo.Document):
     price = mongo.FloatField()
     trigger = mongo.FloatField()
 
+class Copy(mongo.Document):
+    user = mongo.StringField(required=True)
+    follow = mongo.ListField()
+    follower = mongo.ListField()
+    amount = mongo.FloatField()
+
 class Market(mongo.Document):
     price_market = mongo.FloatField()
 

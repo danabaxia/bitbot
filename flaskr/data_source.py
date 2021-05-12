@@ -1,7 +1,7 @@
 import requests 
 import json
 import pandas as pd 
-from flaskr.models import User, Transaction, Balance, BitPrice
+from flaskr.models import User, Transaction, Balance, BitPrice, Order
 from datetime import datetime
 
 key = '3711ff28a46fd9f7cbc915ca70a67b30'
@@ -56,7 +56,8 @@ def get_balance_dict(user_name):
         #balance_dict[balance.date] = balance.cash_balance + balance.bitcoin_value + balance.bitcoin_amount
         balance_dict[balance_idx.date.strftime("%Y-%m-%d")] = balance_idx.cash_balance + balance_idx.bitcoin_value
     return balance_dict
-        
+
+    
 
 
 if __name__ == '__main__':

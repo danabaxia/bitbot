@@ -268,16 +268,43 @@
                 <tbody>
                   {% for user in users %}
                     {% if user.balance|length > 0 %}
+                      {% if not user.username == username %}
                     <tr>
                       <td>{{ user.username }}</td>
                       <td>{{ user.last_seen }}</td>
                       <td>{{ user.balance[-1].bitcoin_value }}</td>
-                      <td>100</td>
+                      <td id="follower_num">100</td>
+                      <script>
+                        $(document).ready(function(){
+                          var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function() {
+                              if (this.readyState == 4 && this.status == 200){
+                                var content = this.responseText;
+                                console.log("content");
+                                console.log(content);
+                                elem = document.getElementById("follower_num")
+                                elem.textContent = content;
+                    
+                              }
+                            };
+                            xhttp.open("GET", "/get_followers/{{ user.username }}", true);
+                            xhttp.send();
+                        })
+                      </script>
                       <td>50%</td>
                       <td>
-                        <input type="button" value="Follow" class="update btn btn-primary">
+                        <input type="button" value="Follow" class="btn btn-link float-middle follow_button" data-bs-toggle="modal" data-bs-target="#follow" id="{{user.username}}">
+                        <script type=text/javascript>
+                          $("#{{user.username}}").click(function(){
+                            var user = $(this).attr('id');
+                            console.log(user);
+                            elem = document.getElementById("trader");
+                            elem.textContent = user;
+                          })
+                        </script>
                       </td>
                     </tr>
+                      {% endif %}
                     {% endif %}
                   {% endfor %}
                 </tbody>
@@ -368,11 +395,7 @@
             <label for="limit_price3" class="form-label">Buy Trail Percentage(%)</label>
             <h6>Trigger a market sell order if price rises above its lowest price by:</h6>
             <input type="text" id="limit_price3" name="price" class="form-control">
-            <h6>Initial Stop Price($): 40000</h6>
             <h6>Current Market Price($): <span class="market">6000</span></h6>
-            <label for="amount8" class="form-label">Amount($)</label>
-            <h6>Amount you are willing to sell</h6>
-            <input type="text" id="amount8" name="amount" class="form-control">
             <h6>$ <span>{{ balance.cash_balance }}</span> bitcoin availabe to sell</h6>
           </div>
           <div class="modal-footer">
@@ -498,14 +521,10 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <label for="limit_price3" class="form-label">Set Trail Percentage(%)</label>
+            <label for="limit_price6" class="form-label">Set Trail Percentage(%)</label>
             <h6>Trigger a market sell order if price falls below its highest price by:</h6>
-            <input type="text" id="limit_price3" name="price" class="form-control">
-            <h6>Initial Stop Price($): 40000</h6>
+            <input type="text" id="limit_price6" name="price" class="form-control">
             <h6>Current Market Price($): <span class="market">6000</span></h6>
-            <label for="amount8" class="form-label">Amount($)</label>
-            <h6>Amount you are willing to sell</h6>
-            <input type="text" id="amount8" name="amount" class="form-control">
             <h6>$ <span>{{ balance.cash_balance }}</span> bitcoin availabe to sell</h6>
           </div>
           <div class="modal-footer">
@@ -582,14 +601,41 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <h5>Trader: <span id="trader"></span></h5>
+          <h6>Set amount you are willing to invest in this trader</h6>
+          <h6>the proportions will be calculated automatically</h6>
+          <label for="amount_follow" class="form-label">Amount($)</label>
+          <input type="text" id="amount_follow" name="amount" class="form-control">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" id="submit_follow">Submit</button>
+          <script>
+            $("#submit_follow").click(function(){
+              elem = document.getElementById("trader");
+              var trader = elem.textContent;
+              console.log("trader name: "+trader);
+              elem1 = document.getElementById("amount_follow");
+              var amount = elem1.value;
+              console.log(amount);
+              $.ajax({
+                url: "/follow&trader=" + trader + "&amount=" + amount,
+                cache: false,
+                success: function(data){
+                  //elem2 = document.getElementById("test");
+                  //console.log(elem2.value)
+                  //elem2.value = "unfollow";
+                  $('#follow').modal('hide');
+
+                }
+              })
+            })
+          </script>
         </div>
       </div>
     </div>
   </div>
+  
 
   <!--unfollow modal-->
   <div class="modal fade" id="unfollow" aria-labelledby="unfollow" aria-hidden="true">

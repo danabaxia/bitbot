@@ -4,7 +4,7 @@ from flask_login.utils import login_required
 from flaskr import app
 from flaskr.forms import *
 from flask_login import current_user, login_user
-from flaskr.models import User, Transaction, Balance, Test, Order
+from flaskr.models import User, Transaction, Balance, Test, Order, Copy
 from flask_login import logout_user
 from flask import request
 from werkzeug.urls import url_parse
@@ -18,14 +18,14 @@ from flask import jsonify
 import json
 from pymongo import MongoClient
 import threading, time 
+from sqlalchemy import not_
 
-"""@app.before_first_request
+@app.before_first_request
 def activate_job():
     def run_job():
         while True:
             print("Run recurring task")
             for order in Order.objects(status='filing'):
-                print(order.method)
                 if order.method == 'market':
                     if order.action == 'buy':
                         order.update(status='complete')
@@ -68,12 +68,54 @@ def activate_job():
                         db.session.add(user)
                         db.session.commit()
                         print('limit order sell complete')
+                elif order.method == 'stop':
+                    if order.action == 'buy' and order.price >bt.get_cypto_price():
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance - order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value + order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('stop order buy complete')
+                    elif order.action == 'sell' and order.price <bt.get_cypto_price():
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance + order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value - order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('stop order sell complete')
+                elif order.method == 'trail':
+                    if order.action == 'buy' and order.price >bt.get_cypto_price():
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance - order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value + order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('limit order buy complete')
+                    elif order.action == 'sell' and order.price <bt.get_cypto_price():
+                        order.update(status='complete')
+                        user = User.query.filter_by(username=order.user).first()
+                        cash = user.balance[-1].cash_balance + order.amount
+                        bitcoin_value = user.balance[-1].bitcoin_value - order.amount
+                        bitcoin_amount = bitcoin_value/order.price
+                        Balance(cash_balance=cash,bitcoin_amount=bitcoin_amount,bitcoin_value=bitcoin_value,user=user)
+                        db.session.add(user)
+                        db.session.commit()
+                        print('limit order sell complete')
 
 
 
-            time.sleep(3)
+            time.sleep(1)
     thread = threading.Thread(target=run_job)
-    thread.start()"""
+    #thread.start()
 
 
 
@@ -230,7 +272,8 @@ def analysis(username):
     user = User.query.filter_by(username=username).first_or_404()
     balance = user.balance[-1]
     users = User.query.all()
-    return render_template('analysis.html', balance=balance, users=users)
+    
+    return render_template('analysis.html', balance=balance, users=users, username=username)
 
 @app.route('/user/<username>/history', methods=['GET','POST'])
 @login_required
@@ -252,6 +295,25 @@ def update_order(order_id, price_update):
     price = float(price_update)
     order = Order(id=order_id).update(price=price)
     print ("update complete")
+    return ('OK')
+
+@app.route('/follow&trader=<string:user>&amount=<string:amount>', methods=['POST', 'GET'])
+def follow(user, amount):
+    print('current user', current_user.username)
+    print(user, amount)
+    copy = Copy.objects(user=current_user.username).first()
+    if copy is None:
+        copy = Copy(user=current_user.username).save()
+    copy.update(add_to_set__follow=user,amount=float(amount))
+    print(copy)
+    #update followers of the trader 
+    copy = Copy.objects(user=user).first()
+    if copy is None:
+        copy = Copy(user=user).save()
+    copy.update(add_to_set__follower=current_user.username)
+
+    #print ("follows", order.follow)
+    print('follow complete')
     return ('OK')
 
 #record user last visit 
@@ -303,6 +365,11 @@ def transfer(username):
 def get_current_price():
     return str(bt.get_cypto_price())
 
+@app.route('/get_followers/<string:user>', methods=["GET"])  
+def get_followers(user):
+    copy = Copy.objects(user=user).first()
+    return str(len(copy.follower))
+
 @app.route('/market_buy', methods=["POST","GET"])
 def market_buy():
     form = OrderForm()
@@ -314,6 +381,19 @@ def market_buy():
         form.amount = float(result['amount'])
         form.price = bt.get_cypto_price()
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        print('trader amount', form.user, form.amount)
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
     return redirect(url_for('analysis',username=form.user))
 
 @app.route('/market_buy_amount', methods=["POST","GET"])
@@ -327,6 +407,18 @@ def market_buy_amount():
         form.price = bt.get_cypto_price()
         form.amount = float(result['amount'])*form.price
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
     return redirect(url_for('analysis',username=form.user))
 
 @app.route('/market_sell', methods=["POST","GET"])
@@ -340,6 +432,18 @@ def market_sell():
         form.amount = float(result['amount'])
         form.price = bt.get_cypto_price()
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
     return 'complete'
 
 @app.route('/market_sell_amount', methods=["POST","GET"])
@@ -353,6 +457,18 @@ def market_sell_amount():
         form.price = bt.get_cypto_price()
         form.amount = float(result['amount'])*form.price
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
     return redirect(url_for('analysis',username=form.user))
 
 @app.route('/limit_buy', methods=["POST","GET"])
@@ -367,6 +483,18 @@ def limit_buy():
         form.amount = float(result['amount'])
         form.price = float(result['price'])
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
         flash('Your changes have been saved.')
         print('sent order')
     return redirect(url_for('analysis',username=form.user))
@@ -382,6 +510,18 @@ def limit_sell():
         form.amount = float(result['amount'])
         form.price = float(result['price'])
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
         flash('Your changes have been saved.')
     return redirect(url_for('analysis',username=form.user))
 
@@ -396,6 +536,18 @@ def stop_buy():
         form.amount = float(result['amount'])
         form.price = float(result['price'])
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
         flash('Your changes have been saved.')
         print('sent order')
     return redirect(url_for('analysis',username=form.user))
@@ -411,6 +563,18 @@ def stop_sell():
         form.amount = float(result['amount'])
         form.price = float(result['price'])
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
         flash('Your changes have been saved.')
         print('sent order')
     return redirect(url_for('analysis',username=form.user))
@@ -426,6 +590,18 @@ def trail_buy():
         form.amount = float(result['amount'])
         form.price = round((float(result['price'])/100 + 1)* bt.get_cypto_price(),2)
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
         flash('Your changes have been saved.')
         print('sent order')
     return redirect(url_for('analysis',username=form.user))
@@ -441,6 +617,18 @@ def trail_sell():
         form.amount = float(result['amount'])
         form.price = round((1 - float(result['price'])/100)* bt.get_cypto_price(),2)
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+        ###################################################
+        #create copy orders
+        copy = Copy.objects(user=current_user.username).first()
+        users = copy.follower
+        print('followers',users)
+        for user in users:
+            form.user = user
+            copy = Copy.objects(user=user).first()
+            form.amount = copy.amount 
+            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+            print('follwer amount', form.user, form.amount)
+        #####################################################
         flash('Your changes have been saved.')
         print('sent order')
     return redirect(url_for('analysis',username=form.user))
