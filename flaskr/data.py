@@ -9,13 +9,11 @@ import datetime
 
 app = Flask(__name__)
 mysql = MySQL()
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:QianWei@910712@localhost/app'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'QianWei@910712'
+
+app.config['MYSQL_DATABASE_USER'] = 'admin'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Jason2021'
 app.config['MYSQL_DATABASE_DB'] = 'app'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_HOST'] = 'app.cruyrchd4npz.us-east-2.rds.amazonaws.com'
 mysql.init_app(app)
 
 
