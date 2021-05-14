@@ -7,18 +7,35 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <style>
+        body {
+          background-image: url('./static/bitcoin.jpeg');
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+    </style>
 </head>
 <body>
-    <ul class="nav nav-pills" style="background-color: #e3f2fd;">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="#" href="{{url_for('summary',username=current_user.username)}}">Home</a>
-        </li>
+    <ul class="nav nav-pills justify-content-end" style="background-color: #96c5e6;">
         <li class="nav-item">
             <a class="nav-link" href="{{url_for('summary',username=current_user.username)}}">Account</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
         </li>
+    </ul>
+    <div class="container">
+    <h2>Features</h2>
+    <li>Manage your bitcoin easily with a clean and simple interface</li>
+    <li>Flexible trading strategies including market order, limit order, stop trailing order, etc.</li>
+    <li>Trading Follow feature allows you to copy the top traders trading activities</li>
+    <li>It's not just wallet, it's COMMUNITY!</li>
+    <h2>Structure</h2>
+    <li>Database: MySQL serving on AWS RDS, MongoDB serving on MongoDB Atlas</li>
+    <li>Backend: Python, FLASK, APACHE, mod_wsgi, AWS EC2</li>
+    <li>Frontend: HTML, JavaScript, Bootstrap, Google charts</li>
+    <li>Data: over 680,000 records of bitcoin minute price</li>
+    </div>
     
 </body>
 </html>

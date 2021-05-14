@@ -279,6 +279,8 @@ def analysis(username):
     user = User.query.filter_by(username=username).first_or_404()
     balance = user.balance[-1]
     users = User.query.all()
+    for user in users:
+        print(user.balance[-1].bitcoin_value, user.balance[0].bitcoin_value)
     
     return render_template('analysis.html', balance=balance, users=users, username=username)
 
@@ -375,7 +377,11 @@ def get_current_price():
 @app.route('/get_followers/<string:user>', methods=["GET"])  
 def get_followers(user):
     copy = Copy.objects(user=user).first()
-    return str(len(copy.follower))
+    if copy is not None:
+        result = str(len(copy.follower))
+    else:
+        result =  '0'
+    return result
 
 @app.route('/market_buy', methods=["POST","GET"])
 def market_buy():
@@ -392,14 +398,15 @@ def market_buy():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
     return redirect(url_for('analysis',username=form.user))
 
@@ -417,14 +424,15 @@ def market_buy_amount():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
     return redirect(url_for('analysis',username=form.user))
 
@@ -442,14 +450,15 @@ def market_sell():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
     return 'complete'
 
@@ -467,14 +476,15 @@ def market_sell_amount():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
     return redirect(url_for('analysis',username=form.user))
 
@@ -493,14 +503,15 @@ def limit_buy():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
         flash('Your changes have been saved.')
         print('sent order')
@@ -520,14 +531,15 @@ def limit_sell():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
         flash('Your changes have been saved.')
     return redirect(url_for('analysis',username=form.user))
@@ -546,14 +558,15 @@ def stop_buy():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
         flash('Your changes have been saved.')
         print('sent order')
@@ -573,14 +586,15 @@ def stop_sell():
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
         flash('Your changes have been saved.')
         print('sent order')
@@ -595,19 +609,20 @@ def trail_buy():
         form.action = 'buy'
         form.method = 'trail'
         form.amount = float(result['amount'])
-        form.price = round((float(result['price'])/100 + 1)* bt.get_cypto_price(),2)
+        form.price = round((float(result['trail_buy'])/100 + 1)* bt.get_cypto_price(),2)
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
         flash('Your changes have been saved.')
         print('sent order')
@@ -622,19 +637,20 @@ def trail_sell():
         form.action = 'sell'
         form.method = 'trail'
         form.amount = float(result['amount'])
-        form.price = round((1 - float(result['price'])/100)* bt.get_cypto_price(),2)
+        form.price = round((1 - float(result['trail_sell'])/100)* bt.get_cypto_price(),2)
         Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
         ###################################################
         #create copy orders
         copy = Copy.objects(user=current_user.username).first()
-        users = copy.follower
-        print('followers',users)
-        for user in users:
-            form.user = user
-            copy = Copy.objects(user=user).first()
-            form.amount = copy.amount 
-            Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
-            print('follwer amount', form.user, form.amount)
+        if copy is not None:
+            users = copy.follower
+            print('followers',users)
+            for user in users:
+                form.user = user
+                copy = Copy.objects(user=user).first()
+                form.amount = copy.amount 
+                Order(user=form.user, action=form.action, amount=form.amount, price=form.price, method=form.method).save()
+                print('follwer amount', form.user, form.amount)
         #####################################################
         flash('Your changes have been saved.')
         print('sent order')

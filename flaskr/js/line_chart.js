@@ -18,11 +18,13 @@ function drawLogScales() {
             width: 500,
             height:380,
             hAxis: {
+              textPosition: 'none',
               curveType: 'function',
               gridlines: {
-                  color: 'transparent'
+                  color: 'transparent',
+                  minSpacing: 100,
               },
-              logScale: false
+              logScale: false,
             },
             vAxis: {
                 gridlines: {
