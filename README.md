@@ -48,23 +48,64 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 <a name="database"></a>
 #### Database Design
-* []()
+
+Based on the schema above, we are going to create totally 5 tables:
+• User table: for storing user id, name, hashed password, etc. User_id is the
+primary key of
+• User table and it is also the foreign key for Transaction table and Product table.
+• Transaction table: for storing the information for each transaction. There is a
+transaction id as the primary key here.
+• Product Table: we persist product information here. Product id is the primary
+key for this table. It is also the primary key for Strategy table.
+• Bitcoin Table: we save the bitcoin data in this table, for example, the bitcoin date, the different prices and volumes. Bitcoin date is the primary key here.
+• Strategy table: here we persist the strategy information including strategy name and algorithm. In this table, product id is the primary key.
+Tool to Use for Database:
+We’ve decided to implement our project by using MySQL. There are some reasons for why we
+chose MySQL for this project:
+• MySQL is compatible to run on many operation systems, such as Windows, Unix, Linux. Compatibility is important for this web-based bitcoin trading application as we need to ensure the application can run perfectly and persistently on various operation systems that our users currently using.
+• MySQL allows transactions to be rolled back, commit, and crash recovery. As every transaction of the bitcoin trading application is money-related, crash recovery is an extremely critical feature for this application. This application
+needs to be robust thus enabling users to trade anytime without worrying about
+the application crush.
+• MySQL is very secure as it keeps passwords encrypted. There is no doubt that
+financial information of our application needed to be stored in a secure
+database, MySQL can guarantee the security as needed.
+• MySQL can be integrated with different development tools that we will use for
+this project.
+• MySQL is one of the great open-source RDBMS databases. In addition, it’s free to
+use without additional cost.
+• MySQL works very good with the open-source ecosystem, can match with most
+of the framework.
+
 
 <a name="data"></a>
 #### Data Source
-* [naive-apl]()
+The main dataset will be the 682544  date samples of bitcoin price change per minute
 
 <a name="front"></a>
 #### Front-End Design
-* [naive-apl]()
+Front-End (Clint-side) Design
+Website’s front end is everything customers see and can interact with using a browser. HTML and CSS and JavaScript are main tools used for the development. HTML is used for basic page structure and content, CSS is for visual editing, and JavaScript is for making websites interactive.
+Web pages for React framework
+Frame 1: LANDING PAGE
+• The user will be able to sign in or register for the site Frame 2: DASHBOARD
+• The user can view the current price for bitcoin
+• When the user clicks Buy/Sell a modal will appear (pictured on the right) so the
+user can make a transaction
+• The user will be able to see the amount of bitcoin they currently have
+• Graphs created with randomized seed data for visualization)
+Frame 3: TRANSACTION INDEX PAGE
+• The user will be able to view all transactions for bitcoin
+• Sorting functionality (Stretch Goal)
+(Chart created with randomized seed data for visualization) Frame 4: PROFILE PAGE
+• The user will be able to update their user information
 
 <a name="end"></a>
 #### Back-End Design
-* [naive-apl]()
+LAMP (Linux, Apache, MySQL, PHP/Perl/Python) is a complete web development stack which is used widely, the choice of web framework is Flask written in Python. Flask is an API of Python that allows us to build up web-applications. It was developed by Armin Ronacher. Flask's framework is more explicit than Django's framework and is also easier to learn because it has less base code to implement a simple web-Application.
 
 <a name="deployment"></a>
 #### Deployment
-* [naive-apl]()
+Amazon EC2 provides resizable compute capacity in the cloud. It is designed to make web-scale cloud computing easier for developers and allows maximum scalability and availability for websites and web applications. Amazon EC2 changes the economics of computing by allowing you to pay only for capacity that you actually use.
 
 
 <a name="references"></a>
