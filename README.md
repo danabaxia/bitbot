@@ -66,6 +66,6 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 ## Team
 
-* Some of the python libraries were cut-and-pasted from [vinta](https://github.com/vinta/awesome-python)
-* References for Go were mostly cut-and-pasted from [gopherdata](https://github.com/gopherdata/resources/tree/master/tooling)
+* [Jialiang](https://github.com/jzhu118)
+* [Wei](https://github.com/WEIQIAN17)
 
