@@ -25,7 +25,7 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 ## Table of Contents
 
-### Frameworks and Libraries
+### Contents
 <!-- MarkdownTOC depth=4 -->
 
 - [Awesome Machine Learning ![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](#awesome-machine-learning-)
