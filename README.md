@@ -27,14 +27,13 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 ### Contents
 <!-- MarkdownTOC depth=4 -->
-- [Database Design]
-- [Data Source]
-- [Front-End Design]
-- [Back-End Design] 
-- [Deployment]
+- [Database Design](#database)
+- [Data Source](#data)
+- [Front-End Design](#front)
+- [Back-End Design](#end)
+- [Deployment](#deployment)
 
-
-### [Reference]
+### Reference
 - [FLASK](#flask)
 - [Python](#python)
 - [MySQL](#mysql)
@@ -55,8 +54,7 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 
 
-<a name="references"></a>
-## Reference
+
 <a name="flask"></a>
 #### FLASK
 * [The FLASK Mega Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) 
