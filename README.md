@@ -34,15 +34,16 @@ We, here, offer a trading web service that provide its own trading algorithms an
     - [Tools](#tools)
   - [APL](#apl)
       - [General-Purpose Machine Learning](#apl-general-purpose-machine-learning)
-### [Reference](#references-1)
+### [Reference](#references)
 
 - [FLASK](#flask)
 - [Python](#python)
 - [Mysql](#mysql)
 - [MongoDB](#mongodb)
 - [AWS](#aws)
+- [Papers](#papers)
 
-[Credits](#credits)
+[Team](#teammates)
 
 <!-- /MarkdownTOC -->
 
@@ -55,20 +56,15 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 
 
-<a name="tools"></a>
+<a name="references"></a>
 ## Reference
 
 <a name="tools-neural-networks"></a>
 #### Neural Networks
 * [layer](https://github.com/cloudkj/layer) - Neural network inference from the command line
 
-<a name="tools-misc"></a>
-#### Misc
 
-* [Pinecone](https://www.pinecone.io/) - Vector database for applications that require real-time, scalable vector embedding and similarity search.
-
-
-## Credits
+## Team
 
 * Some of the python libraries were cut-and-pasted from [vinta](https://github.com/vinta/awesome-python)
 * References for Go were mostly cut-and-pasted from [gopherdata](https://github.com/gopherdata/resources/tree/master/tooling)
