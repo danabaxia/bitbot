@@ -41,7 +41,7 @@ We, here, offer a trading web service that provide its own trading algorithms an
 - [MySQL](#mysql)
 - [MongoDB](#mongodb)
 - [AWS](#aws)
-- [Papers](#papers)
+- [Others](#others)
 
 [Team](#teammates)
 
@@ -77,7 +77,7 @@ We, here, offer a trading web service that provide its own trading algorithms an
 #### MongoDB
 * [MongoDB](https://www.mongodb.com/) 
 
-#### Papers
+#### Others
 * [Bitcoin: A Peer-to-Peer Electronic Cash System](https://git.dhimmel.com/bitcoin-whitepaper/) 
 * [Robinhood Crypto Trading Platform](https://www.techradar.com/reviews/robinhood-crypto-trading-platform) 
 
