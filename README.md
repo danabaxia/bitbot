@@ -60,9 +60,12 @@ We, here, offer a trading web service that provide its own trading algorithms an
 ## Reference
 <a name="flask"></a>
 #### FLASK
-* [The FLASK Mega Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) - The FLASK Mega Tutorial 
-* [FLASK Tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/) - FLASK Tutorial 
+* [The FLASK Mega Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) 
+* [FLASK Tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/) 
 
+#### Papers
+* [Bitcoin: A Peer-to-Peer Electronic Cash System](https://git.dhimmel.com/bitcoin-whitepaper/) 
+* [Robinhood Crypto Trading Platform](https://www.techradar.com/reviews/robinhood-crypto-trading-platform) 
 
 ## Team
 * [Jialiang](https://github.com/jzhu118/bitbot)
