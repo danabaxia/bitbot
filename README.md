@@ -58,14 +58,13 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 <a name="references"></a>
 ## Reference
-
-<a name="tools-neural-networks"></a>
-#### Neural Networks
-* [layer](https://github.com/cloudkj/layer) - Neural network inference from the command line
+<a name="flask"></a>
+#### FLASK
+* [layer](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) - The FLASK Mega Tutorial 
+* [layer](https://flask.palletsprojects.com/en/1.1.x/tutorial/) - FLASK Tutorial 
 
 
 ## Team
-
 * [Jialiang](https://github.com/jzhu118/bitbot)
 * [Wei](https://github.com/WEIQIAN17/bitbot)
 
