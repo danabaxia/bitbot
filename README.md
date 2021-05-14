@@ -60,8 +60,8 @@ We, here, offer a trading web service that provide its own trading algorithms an
 ## Reference
 <a name="flask"></a>
 #### FLASK
-* [layer](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) - The FLASK Mega Tutorial 
-* [layer](https://flask.palletsprojects.com/en/1.1.x/tutorial/) - FLASK Tutorial 
+* [The FLASK Mega Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) - The FLASK Mega Tutorial 
+* [FLASK Tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/) - FLASK Tutorial 
 
 
 ## Team
