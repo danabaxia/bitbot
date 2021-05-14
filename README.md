@@ -28,12 +28,8 @@ We, here, offer a trading web service that provide its own trading algorithms an
 ### Contents
 <!-- MarkdownTOC depth=4 -->
 
-- [Awesome Machine Learning ![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](#awesome-machine-learning-)
-  - [Table of Contents](#table-of-contents)
-    - [Frameworks and Libraries](#frameworks-and-libraries)
-    - [Tools](#tools)
-  - [APL](#apl)
-      - [General-Purpose Machine Learning](#apl-general-purpose-machine-learning)
+- [Awesome Machine Learning ![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)]
+
 
 ### [Reference](#references)
 - [FLASK](#flask)
@@ -42,7 +38,6 @@ We, here, offer a trading web service that provide its own trading algorithms an
 - [MongoDB](#mongodb)
 - [AWS](#aws)
 - [Others](#others)
-
 [Team](#teammates)
 
 <!-- /MarkdownTOC -->
