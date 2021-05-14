@@ -27,11 +27,14 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 ### Contents
 <!-- MarkdownTOC depth=4 -->
+- [Database Design]
+- [Data Source]
+- [Front-End Design]
+- [Back-End Design] 
+- [Deployment]
 
-- [Awesome Machine Learning ![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)]
 
-
-### [Reference](#references)
+### [Reference]
 - [FLASK](#flask)
 - [Python](#python)
 - [MySQL](#mysql)
@@ -46,7 +49,6 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 <a name="apl"></a>
 ## APL
-
 <a name="apl-general-purpose-machine-learning"></a>
 #### General-Purpose Machine Learning
 * [naive-apl](https://github.com/mattcunningham/naive-apl) - Naive Bayesian Classifier implementation in APL. **[Deprecated]**
