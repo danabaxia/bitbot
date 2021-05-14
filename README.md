@@ -40,7 +40,7 @@ We, here, offer a trading web service that provide its own trading algorithms an
 - [Others](#others)
 
 
-### [Team](#teammates)
+### [Team](#team)
 
 <!-- /MarkdownTOC -->
 
@@ -61,24 +61,29 @@ We, here, offer a trading web service that provide its own trading algorithms an
 * [FLASK Tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/) 
 * [FLASK Web Development](https://flask.palletsprojects.com/en/2.0.x/) 
 
+<a name="python"></a>
 #### Python
 * [Python](https://www.python.org/) 
 
+<a name="aws"></a>
 #### AWS
 * [AWS](https://docs.aws.amazon.com/) 
 
+<a name="mysql"></a>
 #### MySQL
 * [MySQL](https://www.mysql.com/) 
 * [MySQL Workbench](https://www.mysql.com/products/workbench/)
 
+<a name="mongodb"></a>
 #### MongoDB
 * [MongoDB](https://www.mongodb.com/) 
 
+<a name="others"></a>
 #### Others
 * [Bitcoin: A Peer-to-Peer Electronic Cash System](https://git.dhimmel.com/bitcoin-whitepaper/) 
 * [Robinhood Crypto Trading Platform](https://www.techradar.com/reviews/robinhood-crypto-trading-platform) 
 
-
+<a name="team"></a>
 ## Team
 * [Jialiang](https://github.com/jzhu118/bitbot)
 * [Wei](https://github.com/WEIQIAN17/bitbot)
