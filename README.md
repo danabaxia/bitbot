@@ -66,6 +66,6 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 ## Team
 
-* [Jialiang](https://github.com/jzhu118)
-* [Wei](https://github.com/WEIQIAN17)
+* [Jialiang](https://github.com/jzhu118/bitbot)
+* [Wei](https://github.com/WEIQIAN17/bitbot)
 
