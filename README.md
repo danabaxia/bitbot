@@ -34,11 +34,13 @@ We, here, offer a trading web service that provide its own trading algorithms an
     - [Tools](#tools)
   - [APL](#apl)
       - [General-Purpose Machine Learning](#apl-general-purpose-machine-learning)
-### [Tools](#tools-1)
+### [Reference](#references-1)
 
-- [Neural Networks](#tools-neural-networks)
-- [Misc](#tools-misc)
-
+- [FLASK](#flask)
+- [Python](#python)
+- [Mysql](#mysql)
+- [MongoDB](#mongodb)
+- [AWS](#aws)
 
 [Credits](#credits)
 
@@ -54,7 +56,7 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 
 <a name="tools"></a>
-## Tools
+## Reference
 
 <a name="tools-neural-networks"></a>
 #### Neural Networks
