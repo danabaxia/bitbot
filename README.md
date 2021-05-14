@@ -38,7 +38,9 @@ We, here, offer a trading web service that provide its own trading algorithms an
 - [MongoDB](#mongodb)
 - [AWS](#aws)
 - [Others](#others)
-[Team](#teammates)
+
+
+### [Team](#teammates)
 
 <!-- /MarkdownTOC -->
 
