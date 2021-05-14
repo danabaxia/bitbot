@@ -48,7 +48,7 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 <a name="database"></a>
 #### Database Design
-* [Database Design](https://user-images.githubusercontent.com/32602010/118217897-ffa4e980-b43b-11eb-83ab-721f92bee4fb.jpeg)
+* [Database Design](https://github.com/WEIQIAN17/bitbot/blob/main/design.jpeg)
 
 Based on the schema above, we are going to create totally 5 tables:
 
