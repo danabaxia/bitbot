@@ -34,11 +34,11 @@ We, here, offer a trading web service that provide its own trading algorithms an
     - [Tools](#tools)
   - [APL](#apl)
       - [General-Purpose Machine Learning](#apl-general-purpose-machine-learning)
-### [Reference](#references)
 
+### [Reference](#references)
 - [FLASK](#flask)
 - [Python](#python)
-- [Mysql](#mysql)
+- [MySQL](#mysql)
 - [MongoDB](#mongodb)
 - [AWS](#aws)
 - [Papers](#papers)
@@ -62,10 +62,25 @@ We, here, offer a trading web service that provide its own trading algorithms an
 #### FLASK
 * [The FLASK Mega Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) 
 * [FLASK Tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/) 
+* [FLASK Web Development](https://flask.palletsprojects.com/en/2.0.x/) 
+
+#### Python
+* [Python](https://www.python.org/) 
+
+#### AWS
+* [AWS](https://docs.aws.amazon.com/) 
+
+#### MySQL
+* [MySQL](https://www.mysql.com/) 
+* [MySQL Workbench](https://www.mysql.com/products/workbench/)
+
+#### MongoDB
+* [MongoDB](https://www.mongodb.com/) 
 
 #### Papers
 * [Bitcoin: A Peer-to-Peer Electronic Cash System](https://git.dhimmel.com/bitcoin-whitepaper/) 
 * [Robinhood Crypto Trading Platform](https://www.techradar.com/reviews/robinhood-crypto-trading-platform) 
+
 
 ## Team
 * [Jialiang](https://github.com/jzhu118/bitbot)
