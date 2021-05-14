@@ -46,15 +46,29 @@ We, here, offer a trading web service that provide its own trading algorithms an
 
 <!-- /MarkdownTOC -->
 
-<a name="apl"></a>
-## APL
-<a name="apl-general-purpose-machine-learning"></a>
-#### General-Purpose Machine Learning
-* [naive-apl](https://github.com/mattcunningham/naive-apl) - Naive Bayesian Classifier implementation in APL. **[Deprecated]**
+<a name="database"></a>
+#### Database Design
+* []()
+
+<a name="data"></a>
+#### Data Source
+* [naive-apl]()
+
+<a name="front"></a>
+#### Front-End Design
+* [naive-apl]()
+
+<a name="end"></a>
+#### Back-End Design
+* [naive-apl]()
+
+<a name="deployment"></a>
+#### Deployment
+* [naive-apl]()
 
 
-
-
+<a name="references"></a>
+## Reference
 <a name="flask"></a>
 #### FLASK
 * [The FLASK Mega Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins) 
